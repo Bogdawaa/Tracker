@@ -8,7 +8,6 @@
 import UIKit
 
 protocol TrackerCellDelegate: AnyObject {
-//    func trackerCompleteButtonDidTap(cell: TrackerCollectionViewCell, isTrackerFinished: Bool)
     func completedTracker(id: UUID, at indexPath: IndexPath)
     func uncompletedTracker(id: UUID, at indexPath: IndexPath)
 }
@@ -20,12 +19,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "TrackerCell"
     
-    let containerView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     let emojiContainerView: UIView = {
         let view = UIView()
         view.isHidden = true
@@ -36,7 +29,13 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    lazy var emojiLabel: UILabel = {
+    private let containerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private lazy var emojiLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 16, weight: .medium)
         lbl.textColor = .white
@@ -45,7 +44,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return lbl
     }()
     
-    lazy var textLabel: UILabel = {
+    private lazy var textLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 12, weight: .medium)
         lbl.textColor = .white
@@ -53,7 +52,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return lbl
     }()
     
-    let counterLabel: UILabel = {
+    private let counterLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "0 дней"
         lbl.font = .systemFont(ofSize: 12, weight: .medium)
@@ -62,7 +61,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return lbl
     }()
     
-    let completeButton: UIButton = {
+    private let completeButton: UIButton = {
         let btn = UIButton()
         btn.setImage(UIImage(named: "btnToCompleteTracker"), for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false

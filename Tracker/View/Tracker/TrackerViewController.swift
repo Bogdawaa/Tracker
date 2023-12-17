@@ -304,7 +304,6 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
                 return UICollectionViewCell()
         }
         cell.cellDelegate = self
-        cell.prepareForReuse()
         
         let trackers = visibleCategories[indexPath.section].trackers
         
