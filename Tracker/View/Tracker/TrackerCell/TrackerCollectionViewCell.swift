@@ -74,21 +74,14 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
 
     
     // MARK: - private properties
-    private var trackerService = TrackerService.shared
     private var counter: Int = 0
     private var trackerId: UUID?
     private var indexPath: IndexPath?
     private var isCompletedToday: Bool = false
     
-    private let btnCompletedTrackerImage = UIImage(named: "btnCompletedTracker")
-    private let btnToCompleteTrackerImage = UIImage(named: "btnToCompleteTracker")
-    
     // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        self.isCompletedToday = false
-        
         containerView.layer.cornerRadius = 16
         containerView.backgroundColor = .ypRed
         containerView.layer.masksToBounds = true
