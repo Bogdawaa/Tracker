@@ -46,13 +46,20 @@ class ScheduleViewController: UIViewController {
     }()
     
     private let days = [
-        WeekDay.Monday,
-        WeekDay.Tuesday,
-        WeekDay.Wednesday,
-        WeekDay.Thursday,
-        WeekDay.Friday,
-        WeekDay.Saturday,
-        WeekDay.Sunday,
+//        WeekDay.Monday,
+//        WeekDay.Tuesday,
+//        WeekDay.Wednesday,
+//        WeekDay.Thursday,
+//        WeekDay.Friday,
+//        WeekDay.Saturday,
+//        WeekDay.Sunday,
+        "Понедельник",
+        "Вторник",
+        "Среда",
+        "Четверг",
+        "Пятница",
+        "Суббота",
+        "Воскресенье"
     ]
     
     // хранит выбранные дни расписания
@@ -112,7 +119,8 @@ class ScheduleViewController: UIViewController {
     }
     
     @objc func switchChanged(_ sender: UISwitch!) {
-        let key = days[sender.tag]
+//        let key = days[sender.tag]
+        let key = WeekDay.allCases[sender.tag]
         if sender.isOn {
             schedule[key] = true
         } else {
@@ -151,7 +159,7 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
         sw.addTarget(self, action: #selector(switchChanged(_:)), for: .valueChanged)
         cell.accessoryView = sw
         cell.backgroundColor = .clear
-        cell.textLabel?.text = days[indexPath.row].rawValue
+        cell.textLabel?.text = days[indexPath.row]
         return cell
     }
     
