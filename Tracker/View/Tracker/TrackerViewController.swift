@@ -111,6 +111,7 @@ class TrackerViewController: UIViewController, TrackerVCDelegate {
         setupView()
         setupCollectionView()
         setupSearchController()
+        showPlaceholderImage()
     }
     
     // MARK: - Setup
@@ -199,6 +200,7 @@ class TrackerViewController: UIViewController, TrackerVCDelegate {
                 trackers: trackers
             )
         }
+        showPlaceholderImage()
         setupCollectionView()
         trackersCollectionView.reloadData()
     }
@@ -207,6 +209,16 @@ class TrackerViewController: UIViewController, TrackerVCDelegate {
         trackerService.completedTrackers.contains { trackerRecord in
             let isSameDay = Calendar.current.isDate(datePicker.date, inSameDayAs: trackerRecord.date)
             return isSameDay
+        }
+    }
+    
+    private func showPlaceholderImage() {
+        if (trackerService.trackers.count == 0 && trackerService.trackers.count == 0) {
+            self.emptyTrackersLogo.image = UIImage(named: "error")
+            self.emptyTrackersLabel.text = "Что будем отслеживать?"
+        } else if visibleCategories.count == 0 {
+            self.emptyTrackersLogo.image = UIImage(named: "notFound")
+            self.emptyTrackersLabel.text = "Ничего не найдено"
         }
     }
     
@@ -272,6 +284,7 @@ extension TrackerViewController: UISearchBarDelegate, UISearchResultsUpdating {
 // MARK: - работа с ячейкой трекера
 extension TrackerViewController: TrackerCellDelegate {
     func completedTracker(id: UUID, at indexPath: IndexPath) {
+        if datePicker.date > Date() { return }
         let tr = TrackerRecord(id: id, date: datePicker.date)
         trackerService.completedTrackers.append(tr)
         trackersCollectionView.reloadItems(at: [indexPath])
