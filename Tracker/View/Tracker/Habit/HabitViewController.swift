@@ -64,6 +64,7 @@ class HabitViewController: UIViewController {
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.layer.cornerRadius = 16
         tv.backgroundColor = .ypGray
+        tv.isScrollEnabled = false
         return tv
     }()
     
@@ -362,11 +363,15 @@ extension HabitViewController: UITableViewDelegate, UITableViewDataSource {
         
         if indexPath.row == 0 {
             cell.detailTextLabel?.text = trackerService.categories[0].category
+            cell.separatorInset = .zero
         } else if indexPath.row == 1 {
             cell.detailTextLabel?.text = createSubtitle()
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell.bounds.size.width * 2)
         }
         cell.textLabel?.text = habitButtons[indexPath.row]
         cell.backgroundColor = .clear
+        cell.detailTextLabel?.textColor = .gray
+        cell.detailTextLabel?.font = .systemFont(ofSize: 17, weight: .regular)
         return cell
     }
     

@@ -32,6 +32,7 @@ class ScheduleViewController: UIViewController {
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.layer.cornerRadius = 16
         tv.backgroundColor = .ypGray
+        tv.isScrollEnabled = false
         return tv
     }()
     
@@ -46,13 +47,6 @@ class ScheduleViewController: UIViewController {
     }()
     
     private let days = [
-//        WeekDay.Monday,
-//        WeekDay.Tuesday,
-//        WeekDay.Wednesday,
-//        WeekDay.Thursday,
-//        WeekDay.Friday,
-//        WeekDay.Saturday,
-//        WeekDay.Sunday,
         "Понедельник",
         "Вторник",
         "Среда",
@@ -160,10 +154,20 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
         cell.accessoryView = sw
         cell.backgroundColor = .clear
         cell.textLabel?.text = days[indexPath.row]
+        
+        if indexPath.row == days.count-1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell.bounds.size.width * 2)
+        } else {
+            cell.separatorInset = .zero
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
