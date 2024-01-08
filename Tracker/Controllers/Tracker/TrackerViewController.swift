@@ -6,14 +6,20 @@
 //
 
 import UIKit
+import CoreData
 
-class TrackerViewController: UIViewController, TrackerVCDelegate {
+final class TrackerViewController: UIViewController, TrackerVCDelegate {
     
     // MARK: - public properties
     var habitVC: HabitViewController?
     
     // MARK: - private properties
-    private var trackerService = TrackerService.shared
+    private let trackerCategoryStore = TrackerCategoryStore.shared
+    private let trackerStore = TrackerStore.shared
+    private let trackerRecordStore = TrackerRecordStore.shared
+    private let trackerService = TrackerService.shared
+    private let uicolormarshaling = UIColorMarshalling()
+
     
     private lazy var searchController: UISearchController = {
         let sc = UISearchController(searchResultsController: nil)
@@ -92,9 +98,12 @@ class TrackerViewController: UIViewController, TrackerVCDelegate {
     private var trackerServiceObserver: NSObjectProtocol?
     private var textFilter: String = ""
 
+    private var trackersDB: [TrackerCoreData] = []
+    private var categoryDB: [TrackerCategoryCoreData] = []
+    private var recordDB: [TrackerRecordCoreData] = []
+    
     private var categories: [TrackerCategory] = [TrackerCategory]()
     private var visibleCategories: [TrackerCategory] = [TrackerCategory]()
-    private var completedTrackers: [TrackerRecord] = [TrackerRecord]()
     
     
     // MARK: - Lyfecycle
@@ -112,6 +121,9 @@ class TrackerViewController: UIViewController, TrackerVCDelegate {
         setupCollectionView()
         setupSearchController()
         showPlaceholderImage()
+        
+        print("recordsDB on start: \(recordDB)")
+
     }
     
     // MARK: - Setup
@@ -184,7 +196,6 @@ class TrackerViewController: UIViewController, TrackerVCDelegate {
     
     private func filterVisibleCategories() {
         let dayOfTheWeek = dayOfTheWeek(currentDate: currentDate ?? datePicker.date)
-        
         visibleCategories = categories.compactMap { category in
             let trackers = category.trackers.filter { tracker in
                 tracker.schedule.contains { weekDay in
@@ -206,9 +217,9 @@ class TrackerViewController: UIViewController, TrackerVCDelegate {
     }
     
     private func isTrackerCompletedToday(id: UUID) -> Bool {
-        trackerService.completedTrackers.contains { trackerRecord in
-            let isSameDay = Calendar.current.isDate(datePicker.date, inSameDayAs: trackerRecord.date)
-            return isSameDay
+        recordDB.contains { trackerRecord in
+            let isSameDay = Calendar.current.isDate(datePicker.date, inSameDayAs: trackerRecord.date ?? Date())
+            return isSameDay && (trackerRecord.id == id)
         }
     }
     
@@ -222,6 +233,36 @@ class TrackerViewController: UIViewController, TrackerVCDelegate {
         }
     }
     
+    // MARK: - DataBase
+    private func fetchData() {
+        trackersDB = trackerStore.fetchTrackers()
+        categoryDB = trackerCategoryStore.fetchCategory()
+        recordDB = trackerRecordStore.fetchRecords()
+    }
+    
+    private func categoriesFromFetchedData() -> [TrackerCategory] {
+        var newArr: [TrackerCategory] = []
+        for category in categoryDB {
+            let trackers = trackerStore.fetchTrackersByCategory(trackerCategory: category)
+            
+            var convertedTrackers: [Tracker] = []
+            for tracker in trackers {
+                let newItem = Tracker(id: tracker.id ?? UUID(),
+                                      name: tracker.name ?? "",
+                                      color: uicolormarshaling.color(from: tracker.color ?? ""),
+                                      emoji: tracker.emoji ?? "",
+                                      schedule: tracker.schedule as! [WeekDay : Bool]
+                )
+                convertedTrackers.append(newItem)
+            }
+            let newItem = TrackerCategory(category: category.category!, trackers: convertedTrackers)
+            newArr.append(newItem)
+        }
+        return newArr
+    }
+    
+
+    // MARK: - public methods
     func setupCollectionView() {
         if visibleCategories.isEmpty {
             trackersCollectionView.isHidden = true
@@ -233,8 +274,8 @@ class TrackerViewController: UIViewController, TrackerVCDelegate {
     }
     
     func updateVisibleCategories() {
-        categories = trackerService.categories
-        print("categories: \(categories.count)")
+        fetchData()
+        categories = categoriesFromFetchedData()
         visibleCategories = categories
         dateChanged(datePicker: datePicker)
     }
@@ -286,15 +327,30 @@ extension TrackerViewController: TrackerCellDelegate {
     func completedTracker(id: UUID, at indexPath: IndexPath) {
         if datePicker.date > Date() { return }
         let tr = TrackerRecord(id: id, date: datePicker.date)
-        trackerService.completedTrackers.append(tr)
+        do {
+            try trackerRecordStore.addNewRecord(tr)
+        } catch {
+            print("Error trying save trackerRecord")
+        }
+        fetchData()
         trackersCollectionView.reloadItems(at: [indexPath])
+        print("recordsDB: \(recordDB)")
     }
     
     func uncompletedTracker(id: UUID, at indexPath: IndexPath) {
-        trackerService.completedTrackers.removeAll { trackerRecord in
-            let isSameDay = Calendar.current.isDate(datePicker.date, inSameDayAs: trackerRecord.date)
+        var recordsToRemove: [TrackerRecordCoreData] = []
+        recordDB.removeAll { trackerRecord in
+            let isSameDay = Calendar.current.isDate(datePicker.date, inSameDayAs: trackerRecord.date!)
+            
+            if (trackerRecord.id == id && isSameDay) {
+                recordsToRemove.append(trackerRecord)
+            }
             return trackerRecord.id == id && isSameDay
         }
+        for record in recordsToRemove {
+            TrackerRecordStore.shared.deleteRecord(record)
+        }
+        fetchData()
         trackersCollectionView.reloadItems(at: [indexPath])
     }
 }
@@ -326,8 +382,8 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
             collectionView.backgroundColor = .white
             
             let isCompletedToday = isTrackerCompletedToday(id: tracker.id)
-            let completedDays = trackerService.completedTrackers.filter { $0.id == tracker.id }.count
-            
+            let completedDays = recordDB.filter { $0.id == tracker.id }.count
+
             cell.updateCell(
                 with: tracker,
                 isCompletedToday: isCompletedToday,

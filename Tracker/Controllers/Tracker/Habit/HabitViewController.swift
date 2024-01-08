@@ -14,7 +14,7 @@ protocol TrackerVCDelegate: AnyObject {
 }
 
 class HabitViewController: UIViewController {
-    
+
     weak var trackerVCDelegate: TrackerVCDelegate?
     
     private var trackerNameIsEmpty: Bool = true
@@ -189,6 +189,7 @@ class HabitViewController: UIViewController {
         
         scheduleVC = ScheduleViewController()
         scheduleVC?.scheduleDelegate = self
+        
     }
     
     // MARK: - private methods
@@ -325,17 +326,18 @@ class HabitViewController: UIViewController {
             emoji: selectedEmoji,
             schedule: schedule
         )
-        trackerService.trackers.append(tracker)
-        
-        // используется 1 категория по умолчанию
-        let category = TrackerCategory(category: "Важное", trackers: trackerService.trackers)
-        trackerService.categories[0] = category
-        
+        do {
+            let categoryDB = TrackerCategoryStore.shared.fetchSingleCategory()
+            try TrackerStore.shared.addNewTracker(tracker, category: categoryDB)
+        } catch {
+            print("Error trying to create tracker")
+        }
         trackerVCDelegate?.updateVisibleCategories()
         trackerVCDelegate?.setupCollectionView()
         self.presentingViewController?.presentingViewController?.dismiss(animated: true)
-        
     }
+    
+
 }
 
 // MARK: - работа с делегатом расписания
