@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ScheduleDelegate: AnyObject {
-    func updateSchedule(schedule: [WeekDay: Bool])
+    func updateSchedule(schedule: [Int])
     func updateTable()
 }
 
@@ -57,15 +57,16 @@ class ScheduleViewController: UIViewController {
     ]
     
     // хранит выбранные дни расписания
-    private var schedule: [WeekDay: Bool] = [
-        WeekDay.Monday: false,
-        WeekDay.Tuesday: false,
-        WeekDay.Wednesday: false,
-        WeekDay.Thursday: false,
-        WeekDay.Friday: false,
-        WeekDay.Saturday: false,
-        WeekDay.Sunday: false
-    ]
+//    private var schedule: [WeekDay: Bool] = [
+//        WeekDay.Monday: false,
+//        WeekDay.Tuesday: false,
+//        WeekDay.Wednesday: false,
+//        WeekDay.Thursday: false,
+//        WeekDay.Friday: false,
+//        WeekDay.Saturday: false,
+//        WeekDay.Sunday: false
+//    ]
+    private var schedule: [Int] = []
     
     
     // MARK: - lifecycle
@@ -112,29 +113,30 @@ class ScheduleViewController: UIViewController {
         NSLayoutConstraint.activate(applyScheduleBtnConstraints)
     }
     
+//    @objc func switchChanged(_ sender: UISwitch!) {
+////        let key = days[sender.tag]
+//        let key = WeekDay.allCases[sender.tag]
+//        if sender.isOn {
+//            schedule[key] = true
+//        } else {
+//            schedule[key] = false
+//        }
+//    }
+    
     @objc func switchChanged(_ sender: UISwitch!) {
-//        let key = days[sender.tag]
-        let key = WeekDay.allCases[sender.tag]
         if sender.isOn {
-            schedule[key] = true
+            schedule.append(sender.tag)
         } else {
-            schedule[key] = false
+            schedule = schedule.filter { $0 != sender.tag}
         }
     }
     
     @objc func applyScheduleBtnAction() {
-        var counter = 0
-        for days in schedule {
-            if days.value == true {
-                counter += 1
-                
-                if counter >= 1 {
-                    scheduleDelegate?.updateSchedule(schedule: schedule)
-                    scheduleDelegate?.updateTable()
-                    dismiss(animated: true)
-                    return
-                }
-            }
+        if schedule.count > 0 {
+            scheduleDelegate?.updateSchedule(schedule: schedule)
+            scheduleDelegate?.updateTable()
+            dismiss(animated: true)
+            return
         }
     }
 }

@@ -11,11 +11,17 @@ protocol TrackerVCDelegate: AnyObject {
     func setupCollectionView()
     func reloadTrackerCollectionView()
     func updateVisibleCategories()
+    func add(_ tracker: Tracker, category: TrackerCategory)
 }
 
 class HabitViewController: UIViewController {
 
     weak var trackerVCDelegate: TrackerVCDelegate?
+    
+    private var alertPresenter: AlertPresenter?
+    private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
+    
+    private var categoryDB: [TrackerCategory] = []
     
     private var trackerNameIsEmpty: Bool = true
     private var scheduleUpdated: Bool = false
@@ -136,10 +142,9 @@ class HabitViewController: UIViewController {
     
     var cellSubtitle = ""
     private var scheduleVC: ScheduleViewController?
-    private var trackerService = TrackerService.shared
     
     private var habitButtons = ["Категория", "Расписание"]
-    private var schedule: [WeekDay: Bool] = [WeekDay: Bool]()
+    private var schedule: [Int] = []
     private var emojiArr = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
         "😇", "😡", "🥶", "🤔", "🙌", "🍔",
@@ -175,6 +180,8 @@ class HabitViewController: UIViewController {
         applyConstraints()
         shouldEnableButton()
         
+        alertPresenter = AlertPresenter(viewController: self)
+        
         // delegates + datasource
         tableView.delegate = self
         tableView.dataSource = self
@@ -190,6 +197,11 @@ class HabitViewController: UIViewController {
         scheduleVC = ScheduleViewController()
         scheduleVC?.scheduleDelegate = self
         
+        do {
+            categoryDB = try trackerCategoryStore.fetchCategories()
+        } catch {
+            alertPresenter?.showAlert(in: self, error: error)
+        }
     }
     
     // MARK: - private methods
@@ -277,14 +289,14 @@ class HabitViewController: UIViewController {
     // генерит сабтайтл для ячейки расписания
     private func createSubtitle() -> String {
         cellSubtitle = ""
-        var counter: Int = 0
-        for  day in schedule {
-            if day.value == true {
-                counter += 1
-                cellSubtitle.append(day.key.rawValue  + ", ")
+        
+        if schedule.count > 0 {
+            for day in schedule.sorted() {
+                cellSubtitle.append(WeekDay(id: day)?.rawValue ?? "")
+                cellSubtitle.append(", ")
             }
         }
-        if counter == 7 {
+        if schedule.count == 7 {
             cellSubtitle = "Каждый день"
             return cellSubtitle
         }
@@ -318,31 +330,29 @@ class HabitViewController: UIViewController {
     
     @objc func createHabitBtnAction() {
         guard let trackerName = trackerNameTextField.text else { return }
-        
+                
         let tracker = Tracker(
             id: UUID(),
             name: trackerName,
             color: selectedColor,
             emoji: selectedEmoji,
-            schedule: schedule
+            schedule: schedule.map { WeekDay(id: $0)?.rawValue ?? "" }.joined(separator: ", ")
         )
-        do {
-            let categoryDB = TrackerCategoryStore.shared.fetchSingleCategory()
-            try TrackerStore.shared.addNewTracker(tracker, category: categoryDB)
-        } catch {
-            print("Error trying to create tracker")
-        }
+
+            guard let categoryDB = categoryDB.last else { return }
+            trackerVCDelegate?.add(tracker, category: categoryDB)
+
+        
         trackerVCDelegate?.updateVisibleCategories()
         trackerVCDelegate?.setupCollectionView()
         self.presentingViewController?.presentingViewController?.dismiss(animated: true)
     }
-    
-
 }
+
 
 // MARK: - работа с делегатом расписания
 extension HabitViewController: ScheduleDelegate {
-    func updateSchedule(schedule: [WeekDay: Bool]) {
+    func updateSchedule(schedule: [Int]) {
         self.schedule = schedule
         self.scheduleUpdated = true
         self.shouldEnableButton()
@@ -364,7 +374,7 @@ extension HabitViewController: UITableViewDelegate, UITableViewDataSource {
         cell.accessoryType = .disclosureIndicator
         
         if indexPath.row == 0 {
-            cell.detailTextLabel?.text = trackerService.categories[0].category
+            cell.detailTextLabel?.text = categoryDB.last?.category
             cell.separatorInset = .zero
         } else if indexPath.row == 1 {
             cell.detailTextLabel?.text = createSubtitle()

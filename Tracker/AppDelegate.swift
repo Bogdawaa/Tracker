@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             } else {
-                print("DB - ", storeDescription.url)
+                //
             }
         })
         return container
@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        ScheduleDayValueTransformer.register()
+//        ScheduleDayValueTransformer.register()
         return true
     }
 
