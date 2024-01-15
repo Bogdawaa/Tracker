@@ -339,8 +339,17 @@ class HabitViewController: UIViewController {
             schedule: schedule.map { WeekDay(id: $0)?.rawValue ?? "" }.joined(separator: ", ")
         )
 
-            guard let categoryDB = categoryDB.last else { return }
+        if let categoryDB = categoryDB.last {
             trackerVCDelegate?.add(tracker, category: categoryDB)
+        } else {
+            let category = TrackerCategory(category: "Новое", trackers: [])
+            do {
+                try trackerCategoryStore.addNewCategory(category)
+                trackerVCDelegate?.add(tracker, category: category)
+            } catch {
+                alertPresenter?.showAlert(in: self, error: error)
+            }
+        }
 
         
         trackerVCDelegate?.updateVisibleCategories()
@@ -374,7 +383,7 @@ extension HabitViewController: UITableViewDelegate, UITableViewDataSource {
         cell.accessoryType = .disclosureIndicator
         
         if indexPath.row == 0 {
-            cell.detailTextLabel?.text = categoryDB.last?.category
+            cell.detailTextLabel?.text = categoryDB.last?.category ?? "Новое"
             cell.separatorInset = .zero
         } else if indexPath.row == 1 {
             cell.detailTextLabel?.text = createSubtitle()
