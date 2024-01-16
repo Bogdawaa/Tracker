@@ -516,7 +516,8 @@ extension HabitViewController: UICollectionViewDelegate, UICollectionViewDataSou
         } else if collectionView == self.emojiCollectionView {
             selectedEmoji = emojiArr[indexPath.row]
             guard let cell = emojiCollectionView.cellForItem(at: indexPath) as? EmojiCollectionViewCell else { return }
-            cell.backgroundColor = .lightGray
+            let color = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 1)
+            cell.backgroundColor = color
             cell.layer.cornerRadius = 16
         }
     }
