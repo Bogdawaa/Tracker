@@ -31,9 +31,8 @@
 		F05FBA2B2B349B9100B524ED /* UIColorMarshalling.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05FBA2A2B349B9100B524ED /* UIColorMarshalling.swift */; };
 		F05FBA2D2B34ABD800B524ED /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05FBA2C2B34ABD800B524ED /* TrackerCategoryStore.swift */; };
 		F05FBA2F2B34C4C500B524ED /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05FBA2E2B34C4C500B524ED /* TrackerRecordStore.swift */; };
-		F05FBA312B3879DC00B524ED /* ScheduleDayValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05FBA302B3879DC00B524ED /* ScheduleDayValueTransformer.swift */; };
-		F09AA7A02B4C6A3900C15DAB /* CopyTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09AA79F2B4C6A3900C15DAB /* CopyTrackerViewController.swift */; };
 		F09AA7A32B55C3DD00C15DAB /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09AA7A22B55C3DC00C15DAB /* AlertPresenter.swift */; };
+		F09AA7A52B56F74800C15DAB /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09AA7A42B56F74800C15DAB /* UIView+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,10 +62,9 @@
 		F05FBA2A2B349B9100B524ED /* UIColorMarshalling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorMarshalling.swift; sourceTree = "<group>"; };
 		F05FBA2C2B34ABD800B524ED /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		F05FBA2E2B34C4C500B524ED /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
-		F05FBA302B3879DC00B524ED /* ScheduleDayValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDayValueTransformer.swift; sourceTree = "<group>"; };
-		F09AA79F2B4C6A3900C15DAB /* CopyTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyTrackerViewController.swift; sourceTree = "<group>"; };
 		F09AA7A12B505F3A00C15DAB /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
 		F09AA7A22B55C3DC00C15DAB /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
+		F09AA7A42B56F74800C15DAB /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,7 +117,7 @@
 				F05FB9D52B16565500B524ED /* UIColor+Extensions.swift */,
 				F05FBA0E2B1E544600B524ED /* CustomTextField.swift */,
 				F05FBA2A2B349B9100B524ED /* UIColorMarshalling.swift */,
-				F05FBA302B3879DC00B524ED /* ScheduleDayValueTransformer.swift */,
+				F09AA7A42B56F74800C15DAB /* UIView+Extensions.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -170,7 +168,6 @@
 				F05FB9FE2B1CC6FC00B524ED /* CreateNewTrackerViewController.swift */,
 				F05FBA102B1F977E00B524ED /* CategoriesViewController.swift */,
 				F05FBA122B1FB03D00B524ED /* ScheduleViewController.swift */,
-				F09AA79F2B4C6A3900C15DAB /* CopyTrackerViewController.swift */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -279,10 +276,10 @@
 				F05FBA202B28D03400B524ED /* EmojiCollectionViewCell.swift in Sources */,
 				F05FB9C02B1145CD00B524ED /* TrackerViewController.swift in Sources */,
 				F05FBA132B1FB03D00B524ED /* ScheduleViewController.swift in Sources */,
+				F09AA7A52B56F74800C15DAB /* UIView+Extensions.swift in Sources */,
 				F05FBA242B2A109D00B524ED /* ColorCollectionViewCell.swift in Sources */,
 				F05FB9D62B16565500B524ED /* UIColor+Extensions.swift in Sources */,
 				F05FBA222B28D0DC00B524ED /* SupplementaryEmojiView.swift in Sources */,
-				F09AA7A02B4C6A3900C15DAB /* CopyTrackerViewController.swift in Sources */,
 				F05FB9D02B13AB3700B524ED /* TabBarController.swift in Sources */,
 				F05FB9BC2B1145CD00B524ED /* AppDelegate.swift in Sources */,
 				F05FB9D22B13AD3200B524ED /* StatisticViewController.swift in Sources */,
@@ -295,7 +292,6 @@
 				F05FB9F92B1906A100B524ED /* Tracker.swift in Sources */,
 				F05FBA192B222BEF00B524ED /* SupplementaryView.swift in Sources */,
 				F05FBA152B20E87200B524ED /* TrackerCollectionViewCell.swift in Sources */,
-				F05FBA312B3879DC00B524ED /* ScheduleDayValueTransformer.swift in Sources */,
 				F05FBA272B30CE1F00B524ED /* Model.xcdatamodeld in Sources */,
 				F05FBA0F2B1E544600B524ED /* CustomTextField.swift in Sources */,
 			);

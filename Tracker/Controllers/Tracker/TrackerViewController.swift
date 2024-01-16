@@ -118,6 +118,8 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         setupCollectionView()
         setupSearchController()
         showPlaceholderImage()
+        
+        view.addHideKeyboardTapGesture()
     }
     
     // MARK: - Setup

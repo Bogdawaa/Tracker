@@ -56,16 +56,6 @@ class ScheduleViewController: UIViewController {
         "Воскресенье"
     ]
     
-    // хранит выбранные дни расписания
-//    private var schedule: [WeekDay: Bool] = [
-//        WeekDay.Monday: false,
-//        WeekDay.Tuesday: false,
-//        WeekDay.Wednesday: false,
-//        WeekDay.Thursday: false,
-//        WeekDay.Friday: false,
-//        WeekDay.Saturday: false,
-//        WeekDay.Sunday: false
-//    ]
     private var schedule: [Int] = []
     
     
@@ -112,16 +102,6 @@ class ScheduleViewController: UIViewController {
         NSLayoutConstraint.activate(scheduleTableViewConstraints)
         NSLayoutConstraint.activate(applyScheduleBtnConstraints)
     }
-    
-//    @objc func switchChanged(_ sender: UISwitch!) {
-////        let key = days[sender.tag]
-//        let key = WeekDay.allCases[sender.tag]
-//        if sender.isOn {
-//            schedule[key] = true
-//        } else {
-//            schedule[key] = false
-//        }
-//    }
     
     @objc func switchChanged(_ sender: UISwitch!) {
         if sender.isOn {

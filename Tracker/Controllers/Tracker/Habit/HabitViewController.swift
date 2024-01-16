@@ -197,6 +197,8 @@ class HabitViewController: UIViewController {
         scheduleVC = ScheduleViewController()
         scheduleVC?.scheduleDelegate = self
         
+        view.addHideKeyboardTapGesture()
+        
         do {
             categoryDB = try trackerCategoryStore.fetchCategories()
         } catch {
