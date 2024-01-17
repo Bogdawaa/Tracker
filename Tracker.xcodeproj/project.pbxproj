@@ -148,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				F05FBA002B1CDFF200B524ED /* HabitViewController.swift */,
+				F05FB9FE2B1CC6FC00B524ED /* CreateNewTrackerViewController.swift */,
 			);
 			path = Habit;
 			sourceTree = "<group>";
@@ -165,7 +166,6 @@
 				F05FBA022B1CF9BC00B524ED /* Habit */,
 				F05FBA0A2B1CFD4F00B524ED /* Irregular */,
 				F05FB9BF2B1145CD00B524ED /* TrackerViewController.swift */,
-				F05FB9FE2B1CC6FC00B524ED /* CreateNewTrackerViewController.swift */,
 				F05FBA102B1F977E00B524ED /* CategoriesViewController.swift */,
 				F05FBA122B1FB03D00B524ED /* ScheduleViewController.swift */,
 			);

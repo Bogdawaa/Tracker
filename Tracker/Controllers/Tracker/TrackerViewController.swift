@@ -83,7 +83,7 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
     
     lazy var trackersCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 200, height: 200)
+        layout.itemSize = CGSize(width: 167, height: 148)
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.register(
             TrackerCollectionViewCell.self,
@@ -183,8 +183,10 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
     }
     
     private func dayOfTheWeek(currentDate: Date) -> String{
-        let index = Calendar.current.component(.weekday, from: currentDate)
-        let day = Calendar.current.shortWeekdaySymbols[index-1]
+        var calendar = Calendar.current
+        calendar.locale = Locale(identifier: "ru_RU")
+        let index = calendar.component(.weekday, from: currentDate)
+        let day = calendar.shortWeekdaySymbols[index-1]
         return day
     }
     
@@ -401,7 +403,10 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 167, height: 148)
+        let cellSpacing: CGFloat = 10
+        let width: CGFloat = (collectionView.bounds.width - cellSpacing) / 2
+        let height: CGFloat = 148
+        return CGSize(width: width, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
