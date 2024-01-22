@@ -11,11 +11,17 @@ protocol TrackerVCDelegate: AnyObject {
     func setupCollectionView()
     func reloadTrackerCollectionView()
     func updateVisibleCategories()
+    func add(_ tracker: Tracker, category: TrackerCategory)
 }
 
 class HabitViewController: UIViewController {
-    
+
     weak var trackerVCDelegate: TrackerVCDelegate?
+    
+    private var alertPresenter: AlertPresenter?
+    private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
+    
+    private var categoryDB: [TrackerCategory] = []
     
     private var trackerNameIsEmpty: Bool = true
     private var scheduleUpdated: Bool = false
@@ -136,10 +142,9 @@ class HabitViewController: UIViewController {
     
     var cellSubtitle = ""
     private var scheduleVC: ScheduleViewController?
-    private var trackerService = TrackerService.shared
     
     private var habitButtons = ["Категория", "Расписание"]
-    private var schedule: [WeekDay: Bool] = [WeekDay: Bool]()
+    private var schedule: [Int] = []
     private var emojiArr = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
         "😇", "😡", "🥶", "🤔", "🙌", "🍔",
@@ -175,6 +180,8 @@ class HabitViewController: UIViewController {
         applyConstraints()
         shouldEnableButton()
         
+        alertPresenter = AlertPresenter(viewController: self)
+        
         // delegates + datasource
         tableView.delegate = self
         tableView.dataSource = self
@@ -189,6 +196,14 @@ class HabitViewController: UIViewController {
         
         scheduleVC = ScheduleViewController()
         scheduleVC?.scheduleDelegate = self
+        
+        view.addHideKeyboardTapGesture()
+        
+        do {
+            categoryDB = try trackerCategoryStore.fetchCategories()
+        } catch {
+            alertPresenter?.showAlert(in: self, error: error)
+        }
     }
     
     // MARK: - private methods
@@ -276,14 +291,14 @@ class HabitViewController: UIViewController {
     // генерит сабтайтл для ячейки расписания
     private func createSubtitle() -> String {
         cellSubtitle = ""
-        var counter: Int = 0
-        for  day in schedule {
-            if day.value == true {
-                counter += 1
-                cellSubtitle.append(day.key.rawValue  + ", ")
+        
+        if schedule.count > 0 {
+            for day in schedule.sorted() {
+                cellSubtitle.append(WeekDay(id: day)?.rawValue ?? "")
+                cellSubtitle.append(", ")
             }
         }
-        if counter == 7 {
+        if schedule.count == 7 {
             cellSubtitle = "Каждый день"
             return cellSubtitle
         }
@@ -317,30 +332,38 @@ class HabitViewController: UIViewController {
     
     @objc func createHabitBtnAction() {
         guard let trackerName = trackerNameTextField.text else { return }
-        
+                
         let tracker = Tracker(
             id: UUID(),
             name: trackerName,
             color: selectedColor,
             emoji: selectedEmoji,
-            schedule: schedule
+            schedule: schedule.map { WeekDay(id: $0)?.rawValue ?? "" }.joined(separator: ", ")
         )
-        trackerService.trackers.append(tracker)
-        
-        // используется 1 категория по умолчанию
-        let category = TrackerCategory(category: "Важное", trackers: trackerService.trackers)
-        trackerService.categories[0] = category
+
+        if let categoryDB = categoryDB.last {
+            trackerVCDelegate?.add(tracker, category: categoryDB)
+        } else {
+            let category = TrackerCategory(category: "Новое", trackers: [])
+            do {
+                try trackerCategoryStore.addNewCategory(category)
+                trackerVCDelegate?.add(tracker, category: category)
+            } catch {
+                alertPresenter?.showAlert(in: self, error: error)
+            }
+        }
+
         
         trackerVCDelegate?.updateVisibleCategories()
         trackerVCDelegate?.setupCollectionView()
         self.presentingViewController?.presentingViewController?.dismiss(animated: true)
-        
     }
 }
 
+
 // MARK: - работа с делегатом расписания
 extension HabitViewController: ScheduleDelegate {
-    func updateSchedule(schedule: [WeekDay: Bool]) {
+    func updateSchedule(schedule: [Int]) {
         self.schedule = schedule
         self.scheduleUpdated = true
         self.shouldEnableButton()
@@ -362,7 +385,7 @@ extension HabitViewController: UITableViewDelegate, UITableViewDataSource {
         cell.accessoryType = .disclosureIndicator
         
         if indexPath.row == 0 {
-            cell.detailTextLabel?.text = trackerService.categories[0].category
+            cell.detailTextLabel?.text = categoryDB.last?.category ?? "Новое"
             cell.separatorInset = .zero
         } else if indexPath.row == 1 {
             cell.detailTextLabel?.text = createSubtitle()
@@ -493,7 +516,8 @@ extension HabitViewController: UICollectionViewDelegate, UICollectionViewDataSou
         } else if collectionView == self.emojiCollectionView {
             selectedEmoji = emojiArr[indexPath.row]
             guard let cell = emojiCollectionView.cellForItem(at: indexPath) as? EmojiCollectionViewCell else { return }
-            cell.backgroundColor = .lightGray
+            let color = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 1)
+            cell.backgroundColor = color
             cell.layer.cornerRadius = 16
         }
     }

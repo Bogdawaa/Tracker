@@ -101,6 +101,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private let uiColorMarshalling = UIColorMarshalling()
+    
     func updateCell(
         with tracker: Tracker,
         isCompletedToday: Bool,

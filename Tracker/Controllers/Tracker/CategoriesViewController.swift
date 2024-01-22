@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CategoriesViewController: UIViewController {
+final class CategoriesViewController: UIViewController {
     
     // MARK: - private properties
     private lazy var titleLabel: UILabel = {
