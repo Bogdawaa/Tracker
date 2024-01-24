@@ -44,17 +44,30 @@ final class CategoriesViewController: UIViewController {
         return lbl
     }()
     
-    private lazy var addCategoryBtn: UIButton = {
+    private lazy var addNewCategoryBtn: UIButton = {
         let btn = UIButton()
         btn.backgroundColor = .ypBlack
         btn.layer.cornerRadius = 16
-        btn.addTarget(self, action: #selector(addCategoryBtnAction), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(addNewCategoryBtnAction), for: .touchUpInside)
         btn.setTitle("Добавить категорию", for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
     
-    private var categories: [TrackerCategory] = [TrackerCategory]()
+    private lazy var categoriesTableView: UITableView = {
+        let tv = UITableView()
+        tv.isHidden = true
+        tv.register(CategoryTableViewCell.self, forCellReuseIdentifier: CategoryTableViewCell.identifier)
+        tv.delegate = self
+        tv.dataSource = self
+        tv.backgroundColor = .clear
+        tv.layer.cornerRadius = 16
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        return tv
+    }()
+    
+    private var viewModel = CategoriesViewModel()
+    
     
     // MARK: - lifecycle
     override func viewDidLoad() {
@@ -62,6 +75,8 @@ final class CategoriesViewController: UIViewController {
         
         setupView()
         applyConstraints()
+        bind()
+        viewModel.getCategories()
     }
     
     // MARK: - Setup
@@ -71,7 +86,8 @@ final class CategoriesViewController: UIViewController {
         emptyTrackresView.addSubview(emptyTrackersLogo)
         emptyTrackresView.addSubview(emptyTrackersLabel)
         view.addSubview(emptyTrackresView)
-        view.addSubview(addCategoryBtn)
+        view.addSubview(categoriesTableView)
+        view.addSubview(addNewCategoryBtn)
         applyConstraints()
     }
     
@@ -98,22 +114,64 @@ final class CategoriesViewController: UIViewController {
             emptyTrackersLabel.centerXAnchor.constraint(equalTo: emptyTrackresView.centerXAnchor),
             emptyTrackersLabel.topAnchor.constraint(equalTo: emptyTrackersLogo.bottomAnchor, constant: 8)
         ]
+        let categoriesTableViewConstraints = [
+            categoriesTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+            categoriesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            categoriesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            categoriesTableView.bottomAnchor.constraint(equalTo: addNewCategoryBtn.topAnchor, constant: -75)
+        ]
         let addCategoryBtnConstraints = [
-            addCategoryBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            addCategoryBtn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            addCategoryBtn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            addCategoryBtn.heightAnchor.constraint(equalToConstant: 60)
+            addNewCategoryBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            addNewCategoryBtn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            addNewCategoryBtn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            addNewCategoryBtn.heightAnchor.constraint(equalToConstant: 60)
         ]
         NSLayoutConstraint.activate(titleLabelConstraints)
         NSLayoutConstraint.activate(emptyTrackresViewConstraints)
         NSLayoutConstraint.activate(emptyTrackersLogoConstrains)
         NSLayoutConstraint.activate(emptyTrackersLabelConstraints)
+        NSLayoutConstraint.activate(categoriesTableViewConstraints)
         NSLayoutConstraint.activate(addCategoryBtnConstraints)
     }
     
+    private func bind() {
+        viewModel.$categories.bind(action: { [weak self] _ in
+            guard let self = self else { return }
+            self.categoriesTableView.reloadData()
+        })
+        viewModel.$isCategoriesEmpty.bind(action: { [weak self] newValue in
+            guard let self = self else { return }
+            self.setCategoriesTableView(isEmpty: newValue)
+        })
+    }
+    
+    private func setCategoriesTableView(isEmpty: Bool) {
+        categoriesTableView.isHidden = isEmpty
+        emptyTrackresView.isHidden = !isEmpty
+    }
+    
     // MARK: - actions
-    @objc func addCategoryBtnAction() {
-        dismiss(animated: true)
-        // TODO: реализовать создание категорий
+    @objc private func addNewCategoryBtnAction() {
+        present(CreateNewCategoryViewController(), animated: true)
+    }
+}
+
+extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.numberOfRowsInSection()
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.identifier, for: indexPath) as! CategoryTableViewCell
+        cell.categoryViewModel = viewModel.categories[indexPath.row]
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 75
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

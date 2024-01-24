@@ -42,7 +42,6 @@ class TemplateViewController: UIViewController {
     }()
     
     // MARK: - init
-    
     convenience init() {
         self.init()
     }
