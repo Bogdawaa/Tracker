@@ -7,7 +7,13 @@
 
 import Foundation
 
+protocol HabitVCDelegate: AnyObject {
+    func getSelectedCategory(category: TrackerCategory?)
+}
+
 final class CategoriesViewModel {
+    
+    weak var habitVCDelegate: HabitVCDelegate?
     
     @Observable
     private(set) var categories: [TrackerCategory] = []
@@ -16,6 +22,7 @@ final class CategoriesViewModel {
     private(set) var isCategoriesEmpty: Bool = true
     
     private let trackerCategoryStore: TrackerCategoryStoreProtocol
+    private var selectedCategory: TrackerCategory?
     
     convenience init() {
         let trackerCategoryStore = TrackerCategoryStore()
@@ -24,6 +31,7 @@ final class CategoriesViewModel {
     
     init(trackerCategoryStore: TrackerCategoryStore) {
         self.trackerCategoryStore = trackerCategoryStore
+        trackerCategoryStore.delegate = self
         getCategories()
     }
     
@@ -33,6 +41,17 @@ final class CategoriesViewModel {
     }
     
     func numberOfRowsInSection() -> Int {
-        return categories.count ?? 0
+        return categories.count
+    }
+    
+    func setSelectedCategory(categoryIndex: IndexPath) {
+        selectedCategory = categories[categoryIndex.row]
+        habitVCDelegate?.getSelectedCategory(category: selectedCategory)
+    }
+}
+
+extension CategoriesViewModel: TrackerCategoryStoreDelegate {
+    func didUpdate(_ update: TrackerCategoryStoreUpdate) {
+        getCategories()
     }
 }

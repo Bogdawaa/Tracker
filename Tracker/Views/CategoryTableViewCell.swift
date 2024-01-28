@@ -30,8 +30,6 @@ final class CategoryTableViewCell: UITableViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
-        contentView.layer.cornerRadius = 16
-        contentView.layer.masksToBounds = true
     }
     
     required init?(coder: NSCoder) {

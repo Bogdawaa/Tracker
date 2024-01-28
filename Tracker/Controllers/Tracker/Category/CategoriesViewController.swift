@@ -10,6 +10,10 @@ import UIKit
 final class CategoriesViewController: UIViewController {
     
     // MARK: - private properties
+    private var viewModel: CategoriesViewModel
+    private var selected: IndexPath?
+
+    
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "Категория"
@@ -61,13 +65,22 @@ final class CategoriesViewController: UIViewController {
         tv.delegate = self
         tv.dataSource = self
         tv.backgroundColor = .clear
+        tv.layer.masksToBounds = true
         tv.layer.cornerRadius = 16
+        tv.allowsMultipleSelection = false
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
     
-    private var viewModel = CategoriesViewModel()
+    // MARK: - init
+    init(viewModel: CategoriesViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - lifecycle
     override func viewDidLoad() {
@@ -150,6 +163,11 @@ final class CategoriesViewController: UIViewController {
         emptyTrackresView.isHidden = !isEmpty
     }
     
+    private func roundCellCorners(cell: UITableViewCell, radius: Double, mask: CACornerMask) {
+        cell.layer.cornerRadius = 16
+        cell.layer.maskedCorners = mask
+    }
+    
     // MARK: - actions
     @objc private func addNewCategoryBtnAction() {
         present(CreateNewCategoryViewController(), animated: true)
@@ -162,8 +180,21 @@ extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.identifier, for: indexPath) as! CategoryTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.identifier,
+                                                       for: indexPath) as? CategoryTableViewCell else {
+            return UITableViewCell()
+        }
         cell.categoryViewModel = viewModel.categories[indexPath.row]
+        
+        if indexPath.row == 0 {
+            roundCellCorners(cell: cell, radius: 16, mask: [.layerMinXMinYCorner, .layerMaxXMinYCorner])
+            cell.separatorInset = .zero
+        }
+        if indexPath.row == categoriesTableView.numberOfRows(inSection: indexPath.section) - 1 {
+            roundCellCorners(cell: cell, radius: 16, mask: [.layerMinXMaxYCorner, .layerMaxXMaxYCorner])
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell.bounds.size.width * 2)
+        }
+        indexPath == selected ? (cell.accessoryType = .checkmark) : (cell.accessoryType = .none)
         
         return cell
     }
@@ -172,6 +203,9 @@ extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource {
         return 75
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        selected = indexPath
+        tableView.reloadData()
+        viewModel.setSelectedCategory(categoryIndex: indexPath)
+        dismiss(animated: true)
     }
 }
