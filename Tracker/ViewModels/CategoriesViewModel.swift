@@ -14,6 +14,8 @@ protocol HabitVCDelegate: AnyObject {
 final class CategoriesViewModel {
     
     weak var habitVCDelegate: HabitVCDelegate?
+    var selectedCellIndex: IndexPath?
+    let trackerCategoryStore: TrackerCategoryStoreProtocol
     
     @Observable
     private(set) var categories: [TrackerCategory] = []
@@ -21,7 +23,6 @@ final class CategoriesViewModel {
     @Observable
     private(set) var isCategoriesEmpty: Bool = true
     
-    private let trackerCategoryStore: TrackerCategoryStoreProtocol
     private var selectedCategory: TrackerCategory?
     
     convenience init() {
@@ -36,8 +37,13 @@ final class CategoriesViewModel {
     }
     
     func getCategories(){
-        categories = try! trackerCategoryStore.fetchCategories()
-        isCategoriesEmpty = categories.isEmpty
+        do {
+            categories = try trackerCategoryStore.fetchCategories()
+            isCategoriesEmpty = categories.isEmpty
+        } catch {
+            // TODO: обработать исключение
+        }
+        
     }
     
     func numberOfRowsInSection() -> Int {

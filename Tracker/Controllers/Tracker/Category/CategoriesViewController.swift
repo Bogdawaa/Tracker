@@ -7,12 +7,14 @@
 
 import UIKit
 
-final class CategoriesViewController: UIViewController {
+protocol CategoriesViewModelProtocol {
+    var viewModel: CategoriesViewModel { get set }
+}
+
+final class CategoriesViewController: UIViewController, CategoriesViewModelProtocol {
     
     // MARK: - private properties
-    private var viewModel: CategoriesViewModel
-    private var selected: IndexPath?
-
+    var viewModel: CategoriesViewModel
     
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
@@ -170,7 +172,7 @@ final class CategoriesViewController: UIViewController {
     
     // MARK: - actions
     @objc private func addNewCategoryBtnAction() {
-        present(CreateNewCategoryViewController(), animated: true)
+        present(CreateNewCategoryViewController(trackerCategoryStore: viewModel.trackerCategoryStore), animated: true)
     }
 }
 
@@ -194,7 +196,7 @@ extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource {
             roundCellCorners(cell: cell, radius: 16, mask: [.layerMinXMaxYCorner, .layerMaxXMaxYCorner])
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell.bounds.size.width * 2)
         }
-        indexPath == selected ? (cell.accessoryType = .checkmark) : (cell.accessoryType = .none)
+        indexPath == viewModel.selectedCellIndex ? (cell.accessoryType = .checkmark) : (cell.accessoryType = .none)
         
         return cell
     }
@@ -203,7 +205,7 @@ extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource {
         return 75
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selected = indexPath
+        viewModel.selectedCellIndex = indexPath
         tableView.reloadData()
         viewModel.setSelectedCategory(categoryIndex: indexPath)
         dismiss(animated: true)
