@@ -17,9 +17,12 @@ protocol TrackerVCDelegate: AnyObject {
 class HabitViewController: UIViewController {
 
     weak var trackerVCDelegate: TrackerVCDelegate?
-    
+
+    // MARK: - private properties
     private var alertPresenter: AlertPresenter?
     private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
+    private let categoriesViewModel = CategoriesViewModel()
+
     
     private var categoryDB: [TrackerCategory] = []
     
@@ -28,9 +31,10 @@ class HabitViewController: UIViewController {
     
     private var selectedEmoji = ""
     private var selectedColor = UIColor.ypBlue
-
     
-    // MARK: - private properties
+    private var categoriesVC: CategoriesViewController?
+    private var selectedCategory: TrackerCategory? = nil
+
     private lazy var scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -170,11 +174,12 @@ class HabitViewController: UIViewController {
         UIColor(red: 141/255, green: 114/255, blue: 230/255, alpha: 1), // very dark purple
         UIColor(red: 47/255, green: 208/255, blue: 88/255, alpha: 1) // dark green
     ]
+    
 
     // MARK: - lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         // setup
         setupView()
         applyConstraints()
@@ -193,6 +198,9 @@ class HabitViewController: UIViewController {
         
         colorsCollectionView.delegate = self
         colorsCollectionView.dataSource = self
+        
+        categoriesVC = CategoriesViewController(viewModel: categoriesViewModel)
+        categoriesViewModel.habitVCDelegate = self
         
         scheduleVC = ScheduleViewController()
         scheduleVC?.scheduleDelegate = self
@@ -307,7 +315,7 @@ class HabitViewController: UIViewController {
     }
     
     private func shouldEnableButton() {
-        if scheduleUpdated && !trackerNameIsEmpty {
+        if scheduleUpdated && !trackerNameIsEmpty && selectedCategory != nil {
             createHabitlBtn.backgroundColor = .ypBlack
             createHabitlBtn.isEnabled = true
         } else {
@@ -331,7 +339,8 @@ class HabitViewController: UIViewController {
     }
     
     @objc func createHabitBtnAction() {
-        guard let trackerName = trackerNameTextField.text else { return }
+        guard let trackerName = trackerNameTextField.text,
+            let selectedCategory = selectedCategory else { return }
                 
         let tracker = Tracker(
             id: UUID(),
@@ -340,20 +349,7 @@ class HabitViewController: UIViewController {
             emoji: selectedEmoji,
             schedule: schedule.map { WeekDay(id: $0)?.rawValue ?? "" }.joined(separator: ", ")
         )
-
-        if let categoryDB = categoryDB.last {
-            trackerVCDelegate?.add(tracker, category: categoryDB)
-        } else {
-            let category = TrackerCategory(category: "Новое", trackers: [])
-            do {
-                try trackerCategoryStore.addNewCategory(category)
-                trackerVCDelegate?.add(tracker, category: category)
-            } catch {
-                alertPresenter?.showAlert(in: self, error: error)
-            }
-        }
-
-        
+        trackerVCDelegate?.add(tracker, category: selectedCategory)
         trackerVCDelegate?.updateVisibleCategories()
         trackerVCDelegate?.setupCollectionView()
         self.presentingViewController?.presentingViewController?.dismiss(animated: true)
@@ -374,6 +370,14 @@ extension HabitViewController: ScheduleDelegate {
     }
 }
 
+// MARK: - работа с делегатом экрана категорий
+extension HabitViewController: HabitVCDelegate {
+    func getSelectedCategory(category: TrackerCategory?) {
+        self.selectedCategory = category
+        tableView.reloadData()
+    }
+}
+
 // MARK: - работа с таблицей
 extension HabitViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -385,7 +389,7 @@ extension HabitViewController: UITableViewDelegate, UITableViewDataSource {
         cell.accessoryType = .disclosureIndicator
         
         if indexPath.row == 0 {
-            cell.detailTextLabel?.text = categoryDB.last?.category ?? "Новое"
+            cell.detailTextLabel?.text = selectedCategory?.category
             cell.separatorInset = .zero
         } else if indexPath.row == 1 {
             cell.detailTextLabel?.text = createSubtitle()
@@ -406,7 +410,7 @@ extension HabitViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         switch indexPath.row {
         case 0:
-            let categoriesVC = CategoriesViewController()
+            guard let categoriesVC = categoriesVC else { return }
             self.present(categoriesVC, animated: true)
         case 1:
             guard let scheduleVC = scheduleVC else {

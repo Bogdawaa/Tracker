@@ -35,6 +35,10 @@
 		F09AA7A52B56F74800C15DAB /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09AA7A42B56F74800C15DAB /* UIView+Extensions.swift */; };
 		F09AA7A72B5D6CA100C15DAB /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09AA7A62B5D6CA000C15DAB /* OnboardingViewController.swift */; };
 		F09AA7AA2B5D6D8B00C15DAB /* TemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09AA7A92B5D6D8B00C15DAB /* TemplateViewController.swift */; };
+		F09AA7AC2B5ECC2300C15DAB /* CreateNewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09AA7AB2B5ECC2300C15DAB /* CreateNewCategoryViewController.swift */; };
+		F09AA7AF2B5EE02E00C15DAB /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09AA7AE2B5EE02E00C15DAB /* Observable.swift */; };
+		F09AA7B22B5EE37E00C15DAB /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09AA7B12B5EE37E00C15DAB /* CategoriesViewModel.swift */; };
+		F09AA7B42B60226B00C15DAB /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09AA7B32B60226B00C15DAB /* CategoryTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +73,10 @@
 		F09AA7A42B56F74800C15DAB /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		F09AA7A62B5D6CA000C15DAB /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		F09AA7A92B5D6D8B00C15DAB /* TemplateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateViewController.swift; sourceTree = "<group>"; };
+		F09AA7AB2B5ECC2300C15DAB /* CreateNewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewCategoryViewController.swift; sourceTree = "<group>"; };
+		F09AA7AE2B5EE02E00C15DAB /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		F09AA7B12B5EE37E00C15DAB /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
+		F09AA7B32B60226B00C15DAB /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +109,7 @@
 		F05FB9BA2B1145CD00B524ED /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				F09AA7B02B5EE31F00C15DAB /* ViewModels */,
 				F05FBA322B38895F00B524ED /* Views */,
 				F05FB9F72B19066500B524ED /* Models */,
 				F05FB9D42B16562200B524ED /* Controllers */,
@@ -111,6 +120,7 @@
 				F05FB9C62B1145D400B524ED /* LaunchScreen.storyboard */,
 				F05FB9C92B1145D400B524ED /* Info.plist */,
 				F05FBA252B30CE1F00B524ED /* Model.xcdatamodeld */,
+				F09AA7AE2B5EE02E00C15DAB /* Observable.swift */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -168,10 +178,10 @@
 		F05FBA0B2B1CFD6500B524ED /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				F09AA7AD2B5ECF3700C15DAB /* Category */,
 				F05FBA022B1CF9BC00B524ED /* Habit */,
 				F05FBA0A2B1CFD4F00B524ED /* Irregular */,
 				F05FB9BF2B1145CD00B524ED /* TrackerViewController.swift */,
-				F05FBA102B1F977E00B524ED /* CategoriesViewController.swift */,
 				F05FBA122B1FB03D00B524ED /* ScheduleViewController.swift */,
 			);
 			path = Tracker;
@@ -200,6 +210,7 @@
 				F05FBA1F2B28D03400B524ED /* EmojiCollectionViewCell.swift */,
 				F05FBA212B28D0DC00B524ED /* SupplementaryEmojiView.swift */,
 				F05FBA232B2A109C00B524ED /* ColorCollectionViewCell.swift */,
+				F09AA7B32B60226B00C15DAB /* CategoryTableViewCell.swift */,
 				F05FBA1C2B23AC7A00B524ED /* TrackerCell */,
 			);
 			path = Views;
@@ -212,6 +223,23 @@
 				F09AA7A92B5D6D8B00C15DAB /* TemplateViewController.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		F09AA7AD2B5ECF3700C15DAB /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				F05FBA102B1F977E00B524ED /* CategoriesViewController.swift */,
+				F09AA7AB2B5ECC2300C15DAB /* CreateNewCategoryViewController.swift */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		F09AA7B02B5EE31F00C15DAB /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				F09AA7B12B5EE37E00C15DAB /* CategoriesViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -289,7 +317,10 @@
 				F05FBA2F2B34C4C500B524ED /* TrackerRecordStore.swift in Sources */,
 				F05FBA202B28D03400B524ED /* EmojiCollectionViewCell.swift in Sources */,
 				F05FB9C02B1145CD00B524ED /* TrackerViewController.swift in Sources */,
+				F09AA7B42B60226B00C15DAB /* CategoryTableViewCell.swift in Sources */,
 				F05FBA132B1FB03D00B524ED /* ScheduleViewController.swift in Sources */,
+				F09AA7B22B5EE37E00C15DAB /* CategoriesViewModel.swift in Sources */,
+				F09AA7AF2B5EE02E00C15DAB /* Observable.swift in Sources */,
 				F09AA7A52B56F74800C15DAB /* UIView+Extensions.swift in Sources */,
 				F05FBA242B2A109D00B524ED /* ColorCollectionViewCell.swift in Sources */,
 				F09AA7AA2B5D6D8B00C15DAB /* TemplateViewController.swift in Sources */,
@@ -299,6 +330,7 @@
 				F05FB9BC2B1145CD00B524ED /* AppDelegate.swift in Sources */,
 				F09AA7A72B5D6CA100C15DAB /* OnboardingViewController.swift in Sources */,
 				F05FB9D22B13AD3200B524ED /* StatisticViewController.swift in Sources */,
+				F09AA7AC2B5ECC2300C15DAB /* CreateNewCategoryViewController.swift in Sources */,
 				F05FB9BE2B1145CD00B524ED /* SceneDelegate.swift in Sources */,
 				F05FBA2B2B349B9100B524ED /* UIColorMarshalling.swift in Sources */,
 				F09AA7A32B55C3DD00C15DAB /* AlertPresenter.swift in Sources */,

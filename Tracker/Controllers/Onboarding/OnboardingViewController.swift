@@ -33,11 +33,24 @@ final class OnboardingViewController: UIPageViewController {
     
     private lazy var pages = [blueVC, redVC]
     
+    
+    // MARK: - init
+    override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: options)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // delegates and datasouces
         dataSource = self
+        delegate = self
         
         if let first = pages.first {
             setViewControllers([first], direction: .forward, animated: true, completion: nil)
@@ -51,6 +64,7 @@ final class OnboardingViewController: UIPageViewController {
     }
 }
 
+// MARK: - pagecontoller delegate
 extension OnboardingViewController: UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if let currentViewController = pageViewController.viewControllers?.first,
@@ -60,6 +74,7 @@ extension OnboardingViewController: UIPageViewControllerDelegate {
     }
 }
 
+// MARK: - pagecontoller datasource
 extension OnboardingViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let viewControllerIndex = pages.firstIndex(of: viewController as! TemplateViewController) else { return nil }
