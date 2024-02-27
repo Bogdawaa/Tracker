@@ -14,7 +14,7 @@ class CreateNewTrackerViewController: UIViewController {
     // MARK: - private properties
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Создание трекера"
+        lbl.text = "create_tracker_title".localized
         lbl.textAlignment = .center
         lbl.textColor = .ypBlack
         lbl.font = .systemFont(ofSize: 16, weight: .medium)
@@ -32,7 +32,7 @@ class CreateNewTrackerViewController: UIViewController {
         let btn = UIButton()
         btn.backgroundColor = .ypBlack
         btn.setTitleColor(.white, for: .normal)
-        btn.setTitle("Привычка", for: .normal)
+        btn.setTitle("button_habit".localized, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.layer.cornerRadius = 16
         btn.addTarget(self, action: #selector(createNewHabitAction), for: .touchUpInside)
@@ -43,7 +43,7 @@ class CreateNewTrackerViewController: UIViewController {
         let btn = UIButton()
         btn.backgroundColor = .ypBlack
         btn.setTitleColor(.white, for: .normal)
-        btn.setTitle("Нерегулярные события", for: .normal)
+        btn.setTitle("button_irregular".localized, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.layer.cornerRadius = 16
         return btn

@@ -13,6 +13,7 @@ struct Tracker {
     let color: UIColor
     let emoji: String
     let schedule: String
+    let isPinned: Bool
 }
 
 struct TrackerCategory {

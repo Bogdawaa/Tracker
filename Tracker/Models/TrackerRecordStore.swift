@@ -16,7 +16,6 @@ protocol TrackerRecordStoreProtocol {
     func fetchRecords() throws -> [TrackerRecord]
     func addNewRecord(with id: UUID, by date: Date) throws
     func deleteRecord(_ trackerRecordCoreData: TrackerRecordCoreData) throws
-    
     func fetchTrackerRecordCoreData(for trackerID: UUID, by date: Date) throws -> TrackerRecordCoreData?
 }
 

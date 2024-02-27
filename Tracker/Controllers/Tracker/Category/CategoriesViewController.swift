@@ -18,7 +18,7 @@ final class CategoriesViewController: UIViewController, CategoriesViewModelProto
     
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Категория"
+        lbl.text = "category_title".localized
         lbl.textAlignment = .center
         lbl.textColor = .ypBlack
         lbl.font = .systemFont(ofSize: 16, weight: .medium)
@@ -42,7 +42,7 @@ final class CategoriesViewController: UIViewController, CategoriesViewModelProto
     
     private lazy var emptyTrackersLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Привычки и события можно объединить по смыслу"
+        lbl.text = "emptyTrackersLabel".localized
         lbl.textAlignment = .center
         lbl.font = .systemFont(ofSize: 12, weight: .medium)
         lbl.textColor = .ypBlack
@@ -55,7 +55,7 @@ final class CategoriesViewController: UIViewController, CategoriesViewModelProto
         btn.backgroundColor = .ypBlack
         btn.layer.cornerRadius = 16
         btn.addTarget(self, action: #selector(addNewCategoryBtnAction), for: .touchUpInside)
-        btn.setTitle("Добавить категорию", for: .normal)
+        btn.setTitle("new_category_button".localized, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()

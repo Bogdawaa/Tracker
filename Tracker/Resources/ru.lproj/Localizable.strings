@@ -1,0 +1,47 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Bogdan Fartdinov on 30.01.2024.
+  
+*/
+"onboarding_blue_titleLabelText" = "Отслеживайте только то, что хотите";
+"onboarding_red_titleLabelText" = "Даже если это не литры воды и йога";
+"onboarding_titleLabel" = "Отслеживайте только то, что хотите";
+"onboarding_skip_button" = "Вот это технологии!";
+"tabbar_trackers" = "Трекеры";
+"tabbar_statistics" = "Статистика";
+"main_title" = "Трекеры";
+"emptyTrackersLabel" = "Что будем отслеживать?";
+"emptyTrackersLabel_not_found" = "Ничего не найдено";
+"searchbar_placeholder" = "Поиск";
+"create_tracker_title" = "Создание трекера";
+"button_habit" = "Привычка";
+"button_irregular" = "Нерегулярное событие";
+"new_habit_title" = "Новая привычка";
+"tracker_name_textfield" = "Введите название трекера";
+"category_tableview_cell" = "Категория";
+"schedule_tableview_cell" = "Расписание";
+"color_collectionview_title" = "Цвет";
+"cancel_button" = "Отменить";
+"create_tracker_button" = "Создать";
+"category_title" = "Категория";
+"new_category_button" = "Добавить категорию";
+"new_category_title" = "Новая категория";
+"category_name_textfield" = "Введите название категории";
+"add_new_category_button" = "Готово";
+"delete" = "Удалить";
+"schedule_title" = "Расписание";
+"monday_uiswitch" = "Понедельник";
+"tuesday_uiswitch" = "Вторник";
+"wednesday_uiswitch" = "Среда";
+"thursday_uiswitch" = "Четверг";
+"friday_uiswitch" = "Пятница";
+"saturday_uiswitch" = "Суббота";
+"sunday_uiswitch" = "Воскресенье";
+"everyday_switch" = "Каждый день";
+"emptyTrackersLabel" = "Привычки и события можно объединить по смыслу";
+"applyScheduleBtn" = "Готово";
+"statisticsNotFoundLabel" = "Анализировать пока нечего";
+"statisticsTitleLabel" = "Статистика";
+

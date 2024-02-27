@@ -9,6 +9,8 @@ import UIKit
 
 class TemplateViewController: UIViewController {
     
+    var onboardingWasShown = false
+    
     private var backgroundImageView: UIImageView = {
         var img = UIImage(named: "onboardingBlue")
         var imgView = UIImageView()
@@ -20,7 +22,7 @@ class TemplateViewController: UIViewController {
     private var btn: UIButton = {
         let btn = UIButton()
         btn.backgroundColor = .ypBlack
-        btn.setTitle("Вот это технологии!", for: .normal)
+        btn.setTitle("onboarding_skip_button".localized, for: .normal)
         btn.setTitleColor(.white, for: .normal)
         btn.layer.cornerRadius = 16
         btn.clipsToBounds = true
@@ -31,7 +33,7 @@ class TemplateViewController: UIViewController {
     
     private var titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Отслеживайте только то, что хотите"
+        lbl.text = "onboarding_titleLabel".localized
         lbl.textAlignment = .center
         lbl.font = .systemFont(ofSize: 32, weight: .bold)
         lbl.numberOfLines = 0
@@ -103,6 +105,8 @@ class TemplateViewController: UIViewController {
     @objc private func nextPage() {
         let tabBar = TabBarController()
         tabBar.modalPresentationStyle = .fullScreen
+        onboardingWasShown = true
+        UserDefaults.standard.set(onboardingWasShown, forKey: "onboardingWasShown")
         self.present(tabBar, animated: true)
     }
 }

@@ -1,20 +1,13 @@
 //
-//  HabitViewController.swift
+//  EditHabitViewController.swift
 //  Tracker
 //
-//  Created by Bogdan Fartdinov on 03.12.2023.
+//  Created by Bogdan Fartdinov on 25.02.2024.
 //
 
 import UIKit
 
-protocol TrackerVCDelegate: AnyObject {
-    func setupCollectionView()
-    func reloadTrackerCollectionView()
-    func updateVisibleCategories()
-    func add(_ tracker: Tracker, category: TrackerCategory)
-}
-
-class HabitViewController: UIViewController {
+class EditHabitViewController: UIViewController {
 
     weak var trackerVCDelegate: TrackerVCDelegate?
 
@@ -35,6 +28,8 @@ class HabitViewController: UIViewController {
     private var categoriesVC: CategoriesViewController?
     private var selectedCategory: TrackerCategory? = nil
 
+    private var trackerToEdit: Tracker?
+    
     private lazy var scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -53,6 +48,16 @@ class HabitViewController: UIViewController {
         lbl.textAlignment = .center
         lbl.textColor = .ypBlack
         lbl.font = .systemFont(ofSize: 16, weight: .medium)
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        return lbl
+    }()
+    
+    private lazy var completedDaysLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.text = "0 дней"
+        lbl.textAlignment = .center
+        lbl.textColor = .ypBlack
+        lbl.font = .systemFont(ofSize: 32, weight: .bold)
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
@@ -178,6 +183,14 @@ class HabitViewController: UIViewController {
         UIColor(red: 47/255, green: 208/255, blue: 88/255, alpha: 1) // dark green
     ]
     
+//    private func pluralizeDays(_ count: Int) -> String {
+//        completedDaysLocalized = String.localizedStringWithFormat(
+//            NSLocalizedString("number_of_days", comment: "Number of days with completed Tracker"),
+//            count
+//        )
+//        return completedDaysLocalized
+//    }
+    
 
     // MARK: - lifecycle
     override func viewDidLoad() {
@@ -228,10 +241,20 @@ class HabitViewController: UIViewController {
         containerView.addSubview(colorsCollectionView)
         containerView.addSubview(cancelBtn)
         containerView.addSubview(createHabitlBtn)
+        view.addSubview(completedDaysLabel)
         view.addSubview(scrollView)
     }
     
     private func applyConstraints() {
+        let titleLabelConstraints = [
+            titleLabel.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 30),
+            titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            titleLabel.heightAnchor.constraint(equalToConstant: 22)
+        ]
+        let completedDaysLabelConstraints = [
+            completedDaysLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            completedDaysLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38)
+        ]
         let scrollViewConstraints = [
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -244,13 +267,8 @@ class HabitViewController: UIViewController {
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
         ]
-        let titleLabelConstraints = [
-            titleLabel.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 30),
-            titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            titleLabel.heightAnchor.constraint(equalToConstant: 22)
-        ]
         let trackerNameTextFieldConstraints = [
-            trackerNameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+            trackerNameTextField.topAnchor.constraint(equalTo: completedDaysLabel.bottomAnchor, constant: 40),
             trackerNameTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             trackerNameTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             trackerNameTextField.heightAnchor.constraint(equalToConstant: 75)
@@ -288,6 +306,7 @@ class HabitViewController: UIViewController {
             createHabitlBtn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             createHabitlBtn.heightAnchor.constraint(equalToConstant: 60)
         ]
+        NSLayoutConstraint.activate(completedDaysLabelConstraints)
         NSLayoutConstraint.activate(scrollViewConstraints)
         NSLayoutConstraint.activate(containerViewConstraints)
         NSLayoutConstraint.activate(titleLabelConstraints)
@@ -297,6 +316,13 @@ class HabitViewController: UIViewController {
         NSLayoutConstraint.activate(colorsCollectionViewConstraints)
         NSLayoutConstraint.activate(cancelBtnConstraints)
         NSLayoutConstraint.activate(createHabitBtnConstraints)
+    }
+    
+    func setTrackerToChange(tracker: Tracker, completedDays: Int) {
+//        self.trackerToEdit = tracker
+//        trackerNameTextField.text = tracker.name
+//        print("schedule = \(tracker.schedule)")
+//        completedDaysLabel.text = String(completedDays)
     }
     
     // генерит сабтайтл для ячейки расписания
@@ -362,7 +388,7 @@ class HabitViewController: UIViewController {
 
 
 // MARK: - работа с делегатом расписания
-extension HabitViewController: ScheduleDelegate {
+extension EditHabitViewController: ScheduleDelegate {
     func updateSchedule(schedule: [Int]) {
         self.schedule = schedule
         self.scheduleUpdated = true
@@ -375,7 +401,7 @@ extension HabitViewController: ScheduleDelegate {
 }
 
 // MARK: - работа с делегатом экрана категорий
-extension HabitViewController: HabitVCDelegate {
+extension EditHabitViewController: HabitVCDelegate {
     func getSelectedCategory(category: TrackerCategory?) {
         self.selectedCategory = category
         tableView.reloadData()
@@ -383,7 +409,7 @@ extension HabitViewController: HabitVCDelegate {
 }
 
 // MARK: - работа с таблицей
-extension HabitViewController: UITableViewDelegate, UITableViewDataSource {
+extension EditHabitViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return habitButtons.count
     }
@@ -429,7 +455,7 @@ extension HabitViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 // MARK: - работа с textfield
-extension HabitViewController: UITextFieldDelegate {
+extension EditHabitViewController: UITextFieldDelegate {
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let maxLength = 38
         let currentString = (trackerNameTextField.text ?? "") as NSString
@@ -440,7 +466,7 @@ extension HabitViewController: UITextFieldDelegate {
 }
 
 // MARK: - работа с collectionview
-extension HabitViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension EditHabitViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.emojiCollectionView {
             return emojiArr.count
@@ -540,4 +566,3 @@ extension HabitViewController: UICollectionViewDelegate, UICollectionViewDataSou
         }
     }
 }
-

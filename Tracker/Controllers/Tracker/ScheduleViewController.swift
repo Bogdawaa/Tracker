@@ -18,7 +18,7 @@ class ScheduleViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Расписание"
+        lbl.text = "schedule_title".localized
         lbl.textAlignment = .center
         lbl.textColor = .ypBlack
         lbl.font = .systemFont(ofSize: 16, weight: .medium)
@@ -41,19 +41,19 @@ class ScheduleViewController: UIViewController {
         btn.backgroundColor = .ypBlack
         btn.layer.cornerRadius = 16
         btn.addTarget(self, action: #selector(applyScheduleBtnAction), for: .touchUpInside)
-        btn.setTitle("Готово", for: .normal)
+        btn.setTitle("applyScheduleBtn".localized, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
     
     private let days = [
-        "Понедельник",
-        "Вторник",
-        "Среда",
-        "Четверг",
-        "Пятница",
-        "Суббота",
-        "Воскресенье"
+        "monday_uiswitch".localized,
+        "tuesday_uiswitch".localized,
+        "wednesday_uiswitch".localized,
+        "thursday_uiswitch".localized,
+        "friday_uiswitch".localized,
+        "saturday_uiswitch".localized,
+        "sunday_uiswitch".localized
     ]
     
     private var schedule: [Int] = []

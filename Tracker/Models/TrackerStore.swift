@@ -16,6 +16,9 @@ protocol TrackerStoreProtocol {
     func setDelegate(_ delegate: TrackerStoreDelegate)
     func fetchTracker(_ trackerCoreData: TrackerCoreData) throws -> Tracker
     func addTrackerToCategory(_ tracker: Tracker, to category: TrackerCategory) throws
+    func update(_ tracker: Tracker, with newTracker: Tracker) throws
+    func delete(_ trackerCoreData: TrackerCoreData) throws
+    func fetchAllTrackers() -> [Tracker]
 }
 
 struct TrackerStoreUpdate {
@@ -79,20 +82,21 @@ final class TrackerStore: NSObject {
               let name = trackerCoreData.name,
               let colorString = trackerCoreData.color,
               let emoji = trackerCoreData.emoji
-
         else {
             throw TrackerStoreError.failedToConvertTracker
         }
         
         let color = uiColorMarshalling.color(from: colorString)
         let schedule = trackerCoreData.schedule
+        let isPinned = trackerCoreData.isPinned
         
         return Tracker(
             id: id,
             name: name,
             color: color,
             emoji: emoji,
-            schedule: schedule ?? ""
+            schedule: schedule ?? "",
+            isPinned: isPinned
         )
     }
     
@@ -105,7 +109,21 @@ final class TrackerStore: NSObject {
         trackerCoreData.emoji = tracker.emoji
         trackerCoreData.name = tracker.name
         trackerCoreData.schedule = tracker.schedule
+        trackerCoreData.isPinned = tracker.isPinned
         trackerCoreData.category = trackerCategoryCoreData
+        try context.save()
+    }
+    
+    private func updateTracker(_ tracker: Tracker, with newTracker: Tracker) throws {
+        var trackerCoreData = fetchedResultsController.fetchedObjects?.first { $0.id == tracker.id }
+        if let trackerCoreData = trackerCoreData {
+            trackerCoreData.id = newTracker.id
+            trackerCoreData.color = uiColorMarshalling.hexString(from: newTracker.color)
+            trackerCoreData.emoji = newTracker.emoji
+            trackerCoreData.name = newTracker.name
+            trackerCoreData.schedule = newTracker.schedule
+            trackerCoreData.isPinned = newTracker.isPinned
+        }
         try context.save()
     }
 }
@@ -122,6 +140,19 @@ extension TrackerStore: TrackerStoreProtocol {
     
     func fetchTracker(_ trackerCoreData: TrackerCoreData) throws -> Tracker {
         try convertTracker(from: trackerCoreData)
+    }
+    
+    func update(_ tracker: Tracker, with newTracker: Tracker) throws {
+        try updateTracker(tracker, with: newTracker)
+    }
+    
+    func delete(_ trackerCoreData: TrackerCoreData) throws {
+        context.delete(trackerCoreData)
+        try context.save()
+    }
+    
+    func fetchAllTrackers() -> [Tracker] {
+        return trackers
     }
 }
 

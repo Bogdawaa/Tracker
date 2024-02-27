@@ -39,6 +39,12 @@
 		F09AA7AF2B5EE02E00C15DAB /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09AA7AE2B5EE02E00C15DAB /* Observable.swift */; };
 		F09AA7B22B5EE37E00C15DAB /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09AA7B12B5EE37E00C15DAB /* CategoriesViewModel.swift */; };
 		F09AA7B42B60226B00C15DAB /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09AA7B32B60226B00C15DAB /* CategoryTableViewCell.swift */; };
+		F0F7CF072B81457300D94FBF /* StatisticsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7CF062B81457300D94FBF /* StatisticsCardView.swift */; };
+		F0F7CF0A2B826D2C00D94FBF /* Model.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F0F7CF092B826D2C00D94FBF /* Model.xcmappingmodel */; };
+		F0F7CF0C2B8BA01800D94FBF /* EditHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7CF0B2B8BA01800D94FBF /* EditHabitViewController.swift */; };
+		F0F85ABF2B69581F00B20288 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = F0F85AC12B69581F00B20288 /* Localizable.stringsdict */; };
+		F0F85AC62B69672F00B20288 /* String + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F85AC52B69672F00B20288 /* String + Extensions.swift */; };
+		F0F85AC72B696E4F00B20288 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F0F85AC92B696E4F00B20288 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +83,16 @@
 		F09AA7AE2B5EE02E00C15DAB /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		F09AA7B12B5EE37E00C15DAB /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
 		F09AA7B32B60226B00C15DAB /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
+		F0F7CF052B7E6B2200D94FBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F0F7CF062B81457300D94FBF /* StatisticsCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCardView.swift; sourceTree = "<group>"; };
+		F0F7CF082B826C9A00D94FBF /* Model 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 3.xcdatamodel"; sourceTree = "<group>"; };
+		F0F7CF092B826D2C00D94FBF /* Model.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model.xcmappingmodel; sourceTree = "<group>"; };
+		F0F7CF0B2B8BA01800D94FBF /* EditHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditHabitViewController.swift; sourceTree = "<group>"; };
+		F0F85AB62B68133800B20288 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F0F85AC02B69581F00B20288 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		F0F85AC22B69583F00B20288 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		F0F85AC52B69672F00B20288 /* String + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String + Extensions.swift"; sourceTree = "<group>"; };
+		F0F85AC82B696E4F00B20288 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +109,7 @@
 		F05FB9AF2B1145CC00B524ED = {
 			isa = PBXGroup;
 			children = (
+				F0F7CF092B826D2C00D94FBF /* Model.xcmappingmodel */,
 				F05FB9BA2B1145CD00B524ED /* Tracker */,
 				F05FB9B92B1145CD00B524ED /* Products */,
 			);
@@ -109,6 +126,7 @@
 		F05FB9BA2B1145CD00B524ED /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				F0F85AB12B68125E00B20288 /* Resources */,
 				F09AA7B02B5EE31F00C15DAB /* ViewModels */,
 				F05FBA322B38895F00B524ED /* Views */,
 				F05FB9F72B19066500B524ED /* Models */,
@@ -132,6 +150,7 @@
 				F05FBA0E2B1E544600B524ED /* CustomTextField.swift */,
 				F05FBA2A2B349B9100B524ED /* UIColorMarshalling.swift */,
 				F09AA7A42B56F74800C15DAB /* UIView+Extensions.swift */,
+				F0F85AC52B69672F00B20288 /* String + Extensions.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -164,6 +183,7 @@
 			children = (
 				F05FBA002B1CDFF200B524ED /* HabitViewController.swift */,
 				F05FB9FE2B1CC6FC00B524ED /* CreateNewTrackerViewController.swift */,
+				F0F7CF0B2B8BA01800D94FBF /* EditHabitViewController.swift */,
 			);
 			path = Habit;
 			sourceTree = "<group>";
@@ -211,6 +231,7 @@
 				F05FBA212B28D0DC00B524ED /* SupplementaryEmojiView.swift */,
 				F05FBA232B2A109C00B524ED /* ColorCollectionViewCell.swift */,
 				F09AA7B32B60226B00C15DAB /* CategoryTableViewCell.swift */,
+				F0F7CF062B81457300D94FBF /* StatisticsCardView.swift */,
 				F05FBA1C2B23AC7A00B524ED /* TrackerCell */,
 			);
 			path = Views;
@@ -240,6 +261,15 @@
 				F09AA7B12B5EE37E00C15DAB /* CategoriesViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		F0F85AB12B68125E00B20288 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F0F85AC12B69581F00B20288 /* Localizable.stringsdict */,
+				F0F85AC92B696E4F00B20288 /* Localizable.strings */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,6 +314,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = F05FB9AF2B1145CC00B524ED;
 			productRefGroup = F05FB9B92B1145CD00B524ED /* Products */;
@@ -301,6 +332,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				F05FB9C82B1145D400B524ED /* LaunchScreen.storyboard in Resources */,
+				F0F85AC72B696E4F00B20288 /* Localizable.strings in Resources */,
+				F0F85ABF2B69581F00B20288 /* Localizable.stringsdict in Resources */,
 				F05FB9C52B1145D400B524ED /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -315,11 +348,13 @@
 				F05FB9FF2B1CC6FC00B524ED /* CreateNewTrackerViewController.swift in Sources */,
 				F05FBA112B1F977E00B524ED /* CategoriesViewController.swift in Sources */,
 				F05FBA2F2B34C4C500B524ED /* TrackerRecordStore.swift in Sources */,
+				F0F7CF0C2B8BA01800D94FBF /* EditHabitViewController.swift in Sources */,
 				F05FBA202B28D03400B524ED /* EmojiCollectionViewCell.swift in Sources */,
 				F05FB9C02B1145CD00B524ED /* TrackerViewController.swift in Sources */,
 				F09AA7B42B60226B00C15DAB /* CategoryTableViewCell.swift in Sources */,
 				F05FBA132B1FB03D00B524ED /* ScheduleViewController.swift in Sources */,
 				F09AA7B22B5EE37E00C15DAB /* CategoriesViewModel.swift in Sources */,
+				F0F7CF0A2B826D2C00D94FBF /* Model.xcmappingmodel in Sources */,
 				F09AA7AF2B5EE02E00C15DAB /* Observable.swift in Sources */,
 				F09AA7A52B56F74800C15DAB /* UIView+Extensions.swift in Sources */,
 				F05FBA242B2A109D00B524ED /* ColorCollectionViewCell.swift in Sources */,
@@ -331,6 +366,7 @@
 				F09AA7A72B5D6CA100C15DAB /* OnboardingViewController.swift in Sources */,
 				F05FB9D22B13AD3200B524ED /* StatisticViewController.swift in Sources */,
 				F09AA7AC2B5ECC2300C15DAB /* CreateNewCategoryViewController.swift in Sources */,
+				F0F7CF072B81457300D94FBF /* StatisticsCardView.swift in Sources */,
 				F05FB9BE2B1145CD00B524ED /* SceneDelegate.swift in Sources */,
 				F05FBA2B2B349B9100B524ED /* UIColorMarshalling.swift in Sources */,
 				F09AA7A32B55C3DD00C15DAB /* AlertPresenter.swift in Sources */,
@@ -342,6 +378,7 @@
 				F05FBA152B20E87200B524ED /* TrackerCollectionViewCell.swift in Sources */,
 				F05FBA272B30CE1F00B524ED /* Model.xcdatamodeld in Sources */,
 				F05FBA0F2B1E544600B524ED /* CustomTextField.swift in Sources */,
+				F0F85AC62B69672F00B20288 /* String + Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,8 +389,27 @@
 			isa = PBXVariantGroup;
 			children = (
 				F05FB9C72B1145D400B524ED /* Base */,
+				F0F85AB62B68133800B20288 /* ru */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		F0F85AC12B69581F00B20288 /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F0F85AC02B69581F00B20288 /* en */,
+				F0F85AC22B69583F00B20288 /* ru */,
+			);
+			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
+		F0F85AC92B696E4F00B20288 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F0F85AC82B696E4F00B20288 /* ru */,
+				F0F7CF052B7E6B2200D94FBF /* en */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -363,6 +419,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -423,6 +480,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -562,10 +620,11 @@
 		F05FBA252B30CE1F00B524ED /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				F0F7CF082B826C9A00D94FBF /* Model 3.xcdatamodel */,
 				F09AA7A12B505F3A00C15DAB /* Model 2.xcdatamodel */,
 				F05FBA262B30CE1F00B524ED /* Model.xcdatamodel */,
 			);
-			currentVersion = F09AA7A12B505F3A00C15DAB /* Model 2.xcdatamodel */;
+			currentVersion = F0F7CF082B826C9A00D94FBF /* Model 3.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

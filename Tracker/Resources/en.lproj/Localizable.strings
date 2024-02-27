@@ -1,0 +1,46 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Bogdan Fartdinov on 30.01.2024.
+  
+*/
+"onboarding_blue_titleLabelText" = "Track whatever you want";
+"onboarding_red_titleLabelText" = "Even if it isn't litres of water or yoga";
+"onboarding_titleLabel" = "Track whatever you want";
+"onboarding_skip_button" = "What a technologies!";
+"tabbar_trackers" = "Trackers";
+"tabbar_statistics" = "Statistics";
+"main_title" = "Trackers";
+"emptyTrackersLabel" = "What are you going to tack?";
+"emptyTrackersLabel_not_found" = "Nothing found";
+"searchbar_placeholder" = "Search";
+"create_tracker_title" = "Create tracker";
+"button_habit" = "Habit";
+"button_irregular" = "Irregular";
+"new_habit_title" = "New habit";
+"tracker_name_textfield" = "Enter tracker name";
+"category_tableview_cell" = "Category";
+"schedule_tableview_cell" = "Schedule";
+"color_collectionview_title" = "Colour";
+"cancel_button" = "Cancel";
+"create_tracker_button" = "Save";
+"category_title" = "Category";
+"new_category_button" = "Add category";
+"new_category_title" = "New category";
+"category_name_textfield" = "Enter category name";
+"add_new_category_button" = "Save";
+"delete" = "Delete";
+"schedule_title" = "Schedule";
+"monday_uiswitch" = "Monday";
+"tuesday_uiswitch" = "Tuesday";
+"wednesday_uiswitch" = "Wednesday";
+"thursday_uiswitch" = "Thursday";
+"friday_uiswitch" = "Friday";
+"saturday_uiswitch" = "Saturday";
+"sunday_uiswitch" = "Sunday";
+"everyday_switch" = "Everyday";
+"emptyTrackersLabel" = "You can group trackers";
+"applyScheduleBtn" = "Save";
+"statisticsNotFoundLabel" = "Nothing found";
+"statisticsTitleLabel" = "Statistics";

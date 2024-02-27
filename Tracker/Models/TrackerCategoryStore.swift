@@ -74,11 +74,27 @@ final class TrackerCategoryStore: NSObject {
     convenience override init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.init(context: context)
+//        self.addPinnedCategory()
     }
 
     init(context: NSManagedObjectContext) {
         self.context = context
     }
+    
+    //    при инициализации добавляет закрепленную категорию
+//    private func addPinnedCategory() {
+//        var categories = try? self.fetchCategories()
+//        let pinnedCategory =  categories?.first(where: { $0.category == "Закрепленные" })
+//
+//        guard let pinnedCategory = pinnedCategory else {
+//            let pinnedCategory = TrackerCategory(
+//                category: "Закрепленные",
+//                trackers: []
+//            )
+//            try? self.addNewCategory(pinnedCategory)
+//            return
+//        }
+//    }
     
     private func fetchSingleCategory(for category: TrackerCategory) throws -> TrackerCategoryCoreData {
         let request = TrackerCategoryCoreData.fetchRequest()

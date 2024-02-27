@@ -19,6 +19,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "TrackerCell"
     
+    private var completedDaysLocalized: String = ""
+    
     let emojiContainerView: UIView = {
         let view = UIView()
         view.isHidden = true
@@ -170,16 +172,11 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }
     
     private func pluralizeDays(_ count: Int) -> String {
-        let remain10 = count % 10
-        let remain100 = count % 100
-        
-        if remain10 == 1 && remain100 != 11 {
-            return "\(count) день"
-        } else if remain10 >= 2 && remain10 <= 4 && (remain100 < 10 || remain100 >= 20) {
-            return "\(count) дня"
-        } else {
-            return "\(count) дней"
-        }
+        completedDaysLocalized = String.localizedStringWithFormat(
+            NSLocalizedString("number_of_days", comment: "Number of days with completed Tracker"),
+            count
+        )
+        return completedDaysLocalized
     }
     
     // MARK: - actions
