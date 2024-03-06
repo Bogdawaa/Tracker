@@ -17,7 +17,7 @@ protocol TrackerStoreProtocol {
     func fetchTracker(_ trackerCoreData: TrackerCoreData) throws -> Tracker
     func addTrackerToCategory(_ tracker: Tracker, to category: TrackerCategory) throws
     func update(_ tracker: Tracker, with newTracker: Tracker) throws
-    func delete(_ trackerCoreData: TrackerCoreData) throws
+    func delete(_ tracker: Tracker) throws
     func fetchAllTrackers() -> [Tracker]
 }
 
@@ -115,7 +115,7 @@ final class TrackerStore: NSObject {
     }
     
     private func updateTracker(_ tracker: Tracker, with newTracker: Tracker) throws {
-        var trackerCoreData = fetchedResultsController.fetchedObjects?.first { $0.id == tracker.id }
+        let trackerCoreData = fetchedResultsController.fetchedObjects?.first { $0.id == tracker.id }
         if let trackerCoreData = trackerCoreData {
             trackerCoreData.id = newTracker.id
             trackerCoreData.color = uiColorMarshalling.hexString(from: newTracker.color)
@@ -146,7 +146,9 @@ extension TrackerStore: TrackerStoreProtocol {
         try updateTracker(tracker, with: newTracker)
     }
     
-    func delete(_ trackerCoreData: TrackerCoreData) throws {
+    func delete(_ tracker: Tracker) throws {
+        let trackerCoreData = fetchedResultsController.fetchedObjects?.first(where:  { $0.id == tracker.id })
+        guard let trackerCoreData = trackerCoreData else { return }
         context.delete(trackerCoreData)
         try context.save()
     }

@@ -72,6 +72,11 @@ class ScheduleViewController: UIViewController {
         scheduleTableView.dataSource = self
     }
     
+    // MARK: - public methods
+    func setupSchedule(with schedule: [Int]) {
+        self.schedule = schedule
+    }
+    
     // MARK: - private methods
     private func setupView() {
         view.backgroundColor = .white
@@ -141,6 +146,13 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell.bounds.size.width * 2)
         } else {
             cell.separatorInset = .zero
+        }
+        
+        // отображение велюченых свичей
+        if schedule.count > 0 {
+            for day in schedule {
+                day == sw.tag ? (sw.isOn = true) : (sw.isOn = false)
+            }
         }
         return cell
     }

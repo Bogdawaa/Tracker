@@ -44,4 +44,5 @@
 "applyScheduleBtn" = "Готово";
 "statisticsNotFoundLabel" = "Анализировать пока нечего";
 "statisticsTitleLabel" = "Статистика";
-
+"edit_habit_title" = "Редактирование привычки";
+"save_tracker_button" = "Сохранить";

@@ -44,3 +44,5 @@
 "applyScheduleBtn" = "Save";
 "statisticsNotFoundLabel" = "Nothing found";
 "statisticsTitleLabel" = "Statistics";
+"edit_habit_title" = "Edit habit tracker";
+"save_tracker_button" = "Save";

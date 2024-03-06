@@ -14,6 +14,7 @@ class EditHabitViewController: UIViewController {
     // MARK: - private properties
     private var alertPresenter: AlertPresenter?
     private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
+    private let trackerStore: TrackerStoreProtocol = TrackerStore()
     private let categoriesViewModel = CategoriesViewModel()
 
     
@@ -44,7 +45,7 @@ class EditHabitViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "new_habit_title".localized
+        lbl.text = "edit_habit_title".localized
         lbl.textAlignment = .center
         lbl.textColor = .ypBlack
         lbl.font = .systemFont(ofSize: 16, weight: .medium)
@@ -54,7 +55,6 @@ class EditHabitViewController: UIViewController {
     
     private lazy var completedDaysLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "0 дней"
         lbl.textAlignment = .center
         lbl.textColor = .ypBlack
         lbl.font = .systemFont(ofSize: 32, weight: .bold)
@@ -141,7 +141,7 @@ class EditHabitViewController: UIViewController {
         let btn = UIButton()
         btn.backgroundColor = .gray
         btn.layer.cornerRadius = 16
-        btn.setTitle("create_tracker_button".localized, for: .normal)
+        btn.setTitle("save_tracker_button".localized, for: .normal)
         btn.setTitleColor(.white, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.isEnabled = false
@@ -182,14 +182,6 @@ class EditHabitViewController: UIViewController {
         UIColor(red: 141/255, green: 114/255, blue: 230/255, alpha: 1), // very dark purple
         UIColor(red: 47/255, green: 208/255, blue: 88/255, alpha: 1) // dark green
     ]
-    
-//    private func pluralizeDays(_ count: Int) -> String {
-//        completedDaysLocalized = String.localizedStringWithFormat(
-//            NSLocalizedString("number_of_days", comment: "Number of days with completed Tracker"),
-//            count
-//        )
-//        return completedDaysLocalized
-//    }
     
 
     // MARK: - lifecycle
@@ -318,11 +310,21 @@ class EditHabitViewController: UIViewController {
         NSLayoutConstraint.activate(createHabitBtnConstraints)
     }
     
-    func setTrackerToChange(tracker: Tracker, completedDays: Int) {
-//        self.trackerToEdit = tracker
-//        trackerNameTextField.text = tracker.name
-//        print("schedule = \(tracker.schedule)")
-//        completedDaysLabel.text = String(completedDays)
+    func setTrackerToChange(tracker: Tracker, completedDays: Int, category: TrackerCategory) {
+        trackerToEdit = tracker
+        trackerNameTextField.text = tracker.name
+        trackerNameIsEmpty = false // ?
+
+        let completedDaysLocalized = String.localizedStringWithFormat(
+            NSLocalizedString("number_of_days", comment: "Number of days with completed Tracker"),
+            completedDays
+        )
+        completedDaysLabel.text = completedDaysLocalized
+        
+        schedule = convertScheduleStringToInt(scheduleStr: tracker.schedule)
+        selectedColor = tracker.color
+        selectedEmoji = tracker.emoji
+        selectedCategory = category
     }
     
     // генерит сабтайтл для ячейки расписания
@@ -344,7 +346,8 @@ class EditHabitViewController: UIViewController {
     }
     
     private func shouldEnableButton() {
-        if scheduleUpdated && !trackerNameIsEmpty && selectedCategory != nil {
+        // TODO: -  включение выключение кнопки "создать" если название трекера изменилось (работает даже если пустое)
+        if (scheduleUpdated || trackerToEdit?.schedule != "") && (!trackerNameIsEmpty /*|| trackerNameTextField.text != ""*/) && selectedCategory != nil {
             createHabitlBtn.backgroundColor = .ypBlack
             createHabitlBtn.isEnabled = true
         } else {
@@ -369,20 +372,22 @@ class EditHabitViewController: UIViewController {
     
     @objc func createHabitBtnAction() {
         guard let trackerName = trackerNameTextField.text,
-            let selectedCategory = selectedCategory else { return }
-                
+            let selectedCategory = selectedCategory,
+            let trackerToEdit = trackerToEdit  else { return }
+        
         let tracker = Tracker(
-            id: UUID(),
+            id: trackerToEdit.id,
             name: trackerName,
             color: selectedColor,
             emoji: selectedEmoji,
             schedule: schedule.map { WeekDay(id: $0)?.rawValue ?? "" }.joined(separator: ", "),
-            isPinned: false
+            isPinned: trackerToEdit.isPinned
         )
+        try? trackerStore.delete(trackerToEdit)
         trackerVCDelegate?.add(tracker, category: selectedCategory)
         trackerVCDelegate?.updateVisibleCategories()
         trackerVCDelegate?.setupCollectionView()
-        self.presentingViewController?.presentingViewController?.dismiss(animated: true)
+        self.presentingViewController?.dismiss(animated: true)
     }
 }
 
@@ -441,12 +446,17 @@ extension EditHabitViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.row {
         case 0:
             guard let categoriesVC = categoriesVC else { return }
+            
+            let selectedIndex = categoryDB.firstIndex(where: { $0.category == self.selectedCategory?.category })
+            categoriesVC.viewModel.selectedCellIndex = IndexPath(row: selectedIndex!, section: 0)
+            
             self.present(categoriesVC, animated: true)
         case 1:
             guard let scheduleVC = scheduleVC else {
                 assert(scheduleVC == nil, "scheduleVC is nill")
                 return
             }
+            scheduleVC.setupSchedule(with: schedule)
             self.present(scheduleVC, animated: true)
         default:
             return

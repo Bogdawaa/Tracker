@@ -17,6 +17,7 @@ protocol TrackerCategoryStoreProtocol {
     func fetchSingleCategoryCoreData(for category: TrackerCategory) throws -> TrackerCategoryCoreData
     func fetchCategories() throws -> [TrackerCategory]
     func addNewCategory(_ trackerCategory: TrackerCategory) throws
+    func removeTracker(tracker: Tracker, category: TrackerCategory) throws
 }
 
 struct TrackerCategoryStoreUpdate {
@@ -34,6 +35,8 @@ final class TrackerCategoryStore: NSObject {
     weak var delegate: TrackerCategoryStoreDelegate?
     
     private let context: NSManagedObjectContext
+    private let uiColorMarshalling = UIColorMarshalling()
+
     
     private lazy var trackerStore: TrackerStore = {
         TrackerStore(context: context)
@@ -74,27 +77,11 @@ final class TrackerCategoryStore: NSObject {
     convenience override init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.init(context: context)
-//        self.addPinnedCategory()
     }
 
     init(context: NSManagedObjectContext) {
         self.context = context
     }
-    
-    //    при инициализации добавляет закрепленную категорию
-//    private func addPinnedCategory() {
-//        var categories = try? self.fetchCategories()
-//        let pinnedCategory =  categories?.first(where: { $0.category == "Закрепленные" })
-//
-//        guard let pinnedCategory = pinnedCategory else {
-//            let pinnedCategory = TrackerCategory(
-//                category: "Закрепленные",
-//                trackers: []
-//            )
-//            try? self.addNewCategory(pinnedCategory)
-//            return
-//        }
-//    }
     
     private func fetchSingleCategory(for category: TrackerCategory) throws -> TrackerCategoryCoreData {
         let request = TrackerCategoryCoreData.fetchRequest()
@@ -121,6 +108,25 @@ final class TrackerCategoryStore: NSObject {
         trackerCategoryCoreData.trackers = NSSet()
         try context.save()
     }
+    
+    private func removeTrackerFromCategory(tracker: Tracker, category: TrackerCategory) {
+        // протестить нормально ли работает??
+        let trackerCategoryCoreData = try? fetchSingleCategoryCoreData(for: category)
+        
+        let trackerCoreData = TrackerCoreData(context: context)
+        trackerCoreData.id = tracker.id
+        trackerCoreData.color = uiColorMarshalling.hexString(from: tracker.color)
+        trackerCoreData.emoji = tracker.emoji
+        trackerCoreData.name = tracker.name
+        trackerCoreData.schedule = tracker.schedule
+        trackerCoreData.isPinned = tracker.isPinned
+        trackerCoreData.category = trackerCategoryCoreData
+        
+        if let trackerCategoryCoreData = trackerCategoryCoreData {
+            trackerCategoryCoreData.category = category.category
+            trackerCategoryCoreData.removeFromTrackers(trackerCoreData)
+        }
+    }
 }
 
 extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
@@ -139,6 +145,9 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
     
     func fetchSingleCategoryCoreData(for category: TrackerCategory) throws -> TrackerCategoryCoreData {
         try fetchSingleCategory(for: category)
+    }
+    func removeTracker(tracker: Tracker, category: TrackerCategory) throws {
+        try removeTrackerFromCategory(tracker: tracker, category: category)
     }
 }
 

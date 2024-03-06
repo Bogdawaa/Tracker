@@ -252,7 +252,6 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         } else {
             pinnedTrackers.removeAll(where: { $0.id == newTracker.id })
             if pinnedTrackers.count == 0 { visibleCategories.removeFirst() }
-            print("visible: \(visibleCategories.count)")
         }
         reloadTrackerCollectionView()
     }
@@ -268,10 +267,14 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         // открыть экран редактирования
         let editHabitVC = EditHabitViewController()
         
-        let completedDays = completedTrackers.filter { $0.id == tracker.id }.count
-        let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
+        let trackerToChange = visibleCategories[indexPath.section].trackers[indexPath.row]
+        let completedDays = completedTrackers.filter { $0.id == trackerToChange.id }.count
         editHabitVC.trackerVCDelegate = self // ?
-//        editHabitVC.setTrackerToChange(tracker: tracker, completedDays: completedDays)
+        editHabitVC.setTrackerToChange(
+            tracker: trackerToChange,
+            completedDays: completedDays,
+            category: visibleCategories[indexPath.section]
+        )
         present(editHabitVC.self, animated: true)
     }
     
@@ -300,9 +303,7 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
     func updateVisibleCategories() {
         fetchData()
         visibleCategories = categories
-        
         dateChanged(datePicker: datePicker)
-//        if pinnedTrackers.count > 0 { insertPinnedCategory() }
     }
     
     func reloadTrackerCollectionView() {
@@ -471,6 +472,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
                                                             verticalFittingPriority: .fittingSizeLevel)
     }
     
+    // MARK: - контекстное меню
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
         guard indexPaths.count > 0 else { return nil }
 
@@ -482,16 +484,44 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         return UIContextMenuConfiguration(actionProvider:  { actionProvider in
             return UIMenu(children: [
                 UIAction(title: pinTitle, handler: { [weak self] _ in
-                    self?.pinTracker(indexPath: indexPath)
+                    guard let self = self else { return }
+                    self.pinTracker(indexPath: indexPath)
                 }),
                 UIAction(title: "Редактировать", handler: { [weak self] _ in
-                    self?.editTracker(indexPath: indexPath)
+                    guard let self = self else { return }
+                    self.editTracker(indexPath: indexPath)
                 }),
-                UIAction(title: "Удалить", handler: { [weak self] _ in
-                    //                    self?.trackerStore.delete()
+                UIAction(title: "Удалить", attributes: .destructive, handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    
+                    let alert = UIAlertController(title: "", message: "Уверены что хотите удалить трекер?", preferredStyle: .actionSheet)
+
+                        alert.addAction(UIAlertAction(title: "Удалить", style: .destructive , handler:{ _ in
+                            try? self.trackerStore.delete(tracker)
+                            self.updateVisibleCategories()
+                        }))
+                        
+                        alert.addAction(UIAlertAction(title: "Отменить", style: .cancel , handler: nil ))
+                    self.present(alert, animated: true, completion: nil)
                 }),
             ])
         })
+        // TODO: доделать выделение только верхней части трекера
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        let params = UIPreviewParameters()
+        params.backgroundColor = .clear
+        
+        guard let indexPath = configuration.identifier as? IndexPath else { return nil }
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: TrackerCollectionViewCell.identifier,
+            for: indexPath) as? TrackerCollectionViewCell else {
+                return nil
+        }
+        
+        let preview = UITargetedPreview(view: cell.contentView, parameters: params)
+        return preview
     }
 }
 
