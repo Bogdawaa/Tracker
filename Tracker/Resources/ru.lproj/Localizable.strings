@@ -46,3 +46,10 @@
 "statisticsTitleLabel" = "Статистика";
 "edit_habit_title" = "Редактирование привычки";
 "save_tracker_button" = "Сохранить";
+"irregular_title" = "Новое нерегулярное событие";
+"filters_list_title" = "Фильтры";
+"completed_trackers" = "Завершенные";
+"uncompleted_trackers" = "Не завершенные";
+"all_trackers" = "Все трекеры";
+"trackers_for_today" = "Трекеры на сегодня";
+"filters_button" = "Фильтры";

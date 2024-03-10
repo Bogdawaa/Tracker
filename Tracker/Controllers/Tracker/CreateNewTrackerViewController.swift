@@ -10,6 +10,8 @@ import UIKit
 class CreateNewTrackerViewController: UIViewController {
 
     var habitVCToPresent: HabitViewController?
+    var irregularVCToPresent: IrregularViewController?
+
     
     // MARK: - private properties
     private lazy var titleLabel: UILabel = {
@@ -46,6 +48,7 @@ class CreateNewTrackerViewController: UIViewController {
         btn.setTitle("button_irregular".localized, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.layer.cornerRadius = 16
+        btn.addTarget(self, action: #selector(createNewIrregularAction), for: .touchUpInside)
         return btn
     }()
     
@@ -100,5 +103,10 @@ class CreateNewTrackerViewController: UIViewController {
     @objc func createNewHabitAction() {
         guard let habitVCToPresent = habitVCToPresent else { return }
         present(habitVCToPresent.self, animated: true)
+    }
+    
+    @objc func createNewIrregularAction() {
+        guard let irregularVCToPresent = irregularVCToPresent else { return }
+        present(irregularVCToPresent.self, animated: true)
     }
 }

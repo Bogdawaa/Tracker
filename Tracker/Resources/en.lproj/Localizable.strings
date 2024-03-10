@@ -46,3 +46,10 @@
 "statisticsTitleLabel" = "Statistics";
 "edit_habit_title" = "Edit habit tracker";
 "save_tracker_button" = "Save";
+"irregular_title" = "New irregular tracker";
+"filters_list_title" = "Filters";
+"completed_trackers" = "Completed";
+"uncompleted_trackers" = "Uncompleted";
+"all_trackers" = "All trackers";
+"trackers_for_today" = "Trackers for today";
+"filters_button" = "Filters";

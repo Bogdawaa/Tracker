@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F00DF4832B98D3C500825462 /* IrregularViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00DF4822B98D3C500825462 /* IrregularViewController.swift */; };
+		F00DF4882B991B8C00825462 /* EditIrregularViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00DF4872B991B8C00825462 /* EditIrregularViewController.swift */; };
+		F00DF48A2B9A335500825462 /* FilterListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00DF4892B9A335500825462 /* FilterListViewController.swift */; };
+		F00DF48C2B9B3A0D00825462 /* FilterListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00DF48B2B9B3A0D00825462 /* FilterListViewModel.swift */; };
+		F00DF48E2B9CC3C600825462 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00DF48D2B9CC3C600825462 /* Filters.swift */; };
+		F00DF4962B9E1DB500825462 /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00DF4952B9E1DB500825462 /* TrackerTests.swift */; };
 		F05FB9BC2B1145CD00B524ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05FB9BB2B1145CD00B524ED /* AppDelegate.swift */; };
 		F05FB9BE2B1145CD00B524ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05FB9BD2B1145CD00B524ED /* SceneDelegate.swift */; };
 		F05FB9C02B1145CD00B524ED /* TrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05FB9BF2B1145CD00B524ED /* TrackerViewController.swift */; };
@@ -40,14 +46,31 @@
 		F09AA7B22B5EE37E00C15DAB /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09AA7B12B5EE37E00C15DAB /* CategoriesViewModel.swift */; };
 		F09AA7B42B60226B00C15DAB /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09AA7B32B60226B00C15DAB /* CategoryTableViewCell.swift */; };
 		F0F7CF072B81457300D94FBF /* StatisticsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7CF062B81457300D94FBF /* StatisticsCardView.swift */; };
-		F0F7CF0A2B826D2C00D94FBF /* Model.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F0F7CF092B826D2C00D94FBF /* Model.xcmappingmodel */; };
 		F0F7CF0C2B8BA01800D94FBF /* EditHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7CF0B2B8BA01800D94FBF /* EditHabitViewController.swift */; };
 		F0F85ABF2B69581F00B20288 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = F0F85AC12B69581F00B20288 /* Localizable.stringsdict */; };
 		F0F85AC62B69672F00B20288 /* String + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F85AC52B69672F00B20288 /* String + Extensions.swift */; };
 		F0F85AC72B696E4F00B20288 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F0F85AC92B696E4F00B20288 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		F00DF4972B9E1DB500825462 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F05FB9B02B1145CC00B524ED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F05FB9B72B1145CC00B524ED;
+			remoteInfo = Tracker;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		F00DF4822B98D3C500825462 /* IrregularViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrregularViewController.swift; sourceTree = "<group>"; };
+		F00DF4842B98EE9900825462 /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
+		F00DF4872B991B8C00825462 /* EditIrregularViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIrregularViewController.swift; sourceTree = "<group>"; };
+		F00DF4892B9A335500825462 /* FilterListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterListViewController.swift; sourceTree = "<group>"; };
+		F00DF48B2B9B3A0D00825462 /* FilterListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterListViewModel.swift; sourceTree = "<group>"; };
+		F00DF48D2B9CC3C600825462 /* Filters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
+		F00DF4932B9E1DB500825462 /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F00DF4952B9E1DB500825462 /* TrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
 		F05FB9B82B1145CD00B524ED /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F05FB9BB2B1145CD00B524ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F05FB9BD2B1145CD00B524ED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -86,7 +109,6 @@
 		F0F7CF052B7E6B2200D94FBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F0F7CF062B81457300D94FBF /* StatisticsCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCardView.swift; sourceTree = "<group>"; };
 		F0F7CF082B826C9A00D94FBF /* Model 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 3.xcdatamodel"; sourceTree = "<group>"; };
-		F0F7CF092B826D2C00D94FBF /* Model.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model.xcmappingmodel; sourceTree = "<group>"; };
 		F0F7CF0B2B8BA01800D94FBF /* EditHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditHabitViewController.swift; sourceTree = "<group>"; };
 		F0F85AB62B68133800B20288 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		F0F85AC02B69581F00B20288 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -96,6 +118,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		F00DF4902B9E1DB500825462 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F05FB9B52B1145CC00B524ED /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -106,11 +135,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F00DF4942B9E1DB500825462 /* TrackerTests */ = {
+			isa = PBXGroup;
+			children = (
+				F00DF4952B9E1DB500825462 /* TrackerTests.swift */,
+			);
+			path = TrackerTests;
+			sourceTree = "<group>";
+		};
 		F05FB9AF2B1145CC00B524ED = {
 			isa = PBXGroup;
 			children = (
-				F0F7CF092B826D2C00D94FBF /* Model.xcmappingmodel */,
 				F05FB9BA2B1145CD00B524ED /* Tracker */,
+				F00DF4942B9E1DB500825462 /* TrackerTests */,
 				F05FB9B92B1145CD00B524ED /* Products */,
 			);
 			sourceTree = "<group>";
@@ -119,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				F05FB9B82B1145CD00B524ED /* Tracker.app */,
+				F00DF4932B9E1DB500825462 /* TrackerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -174,6 +212,7 @@
 				F05FBA2C2B34ABD800B524ED /* TrackerCategoryStore.swift */,
 				F05FBA2E2B34C4C500B524ED /* TrackerRecordStore.swift */,
 				F09AA7A22B55C3DC00C15DAB /* AlertPresenter.swift */,
+				F00DF48D2B9CC3C600825462 /* Filters.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -182,7 +221,6 @@
 			isa = PBXGroup;
 			children = (
 				F05FBA002B1CDFF200B524ED /* HabitViewController.swift */,
-				F05FB9FE2B1CC6FC00B524ED /* CreateNewTrackerViewController.swift */,
 				F0F7CF0B2B8BA01800D94FBF /* EditHabitViewController.swift */,
 			);
 			path = Habit;
@@ -191,6 +229,8 @@
 		F05FBA0A2B1CFD4F00B524ED /* Irregular */ = {
 			isa = PBXGroup;
 			children = (
+				F00DF4822B98D3C500825462 /* IrregularViewController.swift */,
+				F00DF4872B991B8C00825462 /* EditIrregularViewController.swift */,
 			);
 			path = Irregular;
 			sourceTree = "<group>";
@@ -202,7 +242,9 @@
 				F05FBA022B1CF9BC00B524ED /* Habit */,
 				F05FBA0A2B1CFD4F00B524ED /* Irregular */,
 				F05FB9BF2B1145CD00B524ED /* TrackerViewController.swift */,
+				F05FB9FE2B1CC6FC00B524ED /* CreateNewTrackerViewController.swift */,
 				F05FBA122B1FB03D00B524ED /* ScheduleViewController.swift */,
+				F00DF4892B9A335500825462 /* FilterListViewController.swift */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -259,6 +301,7 @@
 			isa = PBXGroup;
 			children = (
 				F09AA7B12B5EE37E00C15DAB /* CategoriesViewModel.swift */,
+				F00DF48B2B9B3A0D00825462 /* FilterListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -275,6 +318,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		F00DF4922B9E1DB500825462 /* TrackerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F00DF4992B9E1DB500825462 /* Build configuration list for PBXNativeTarget "TrackerTests" */;
+			buildPhases = (
+				F00DF48F2B9E1DB500825462 /* Sources */,
+				F00DF4902B9E1DB500825462 /* Frameworks */,
+				F00DF4912B9E1DB500825462 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F00DF4982B9E1DB500825462 /* PBXTargetDependency */,
+			);
+			name = TrackerTests;
+			productName = TrackerTests;
+			productReference = F00DF4932B9E1DB500825462 /* TrackerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		F05FB9B72B1145CC00B524ED /* Tracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F05FB9CC2B1145D500B524ED /* Build configuration list for PBXNativeTarget "Tracker" */;
@@ -302,6 +363,10 @@
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					F00DF4922B9E1DB500825462 = {
+						CreatedOnToolsVersion = 14.3.1;
+						TestTargetID = F05FB9B72B1145CC00B524ED;
+					};
 					F05FB9B72B1145CC00B524ED = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
@@ -322,11 +387,19 @@
 			projectRoot = "";
 			targets = (
 				F05FB9B72B1145CC00B524ED /* Tracker */,
+				F00DF4922B9E1DB500825462 /* TrackerTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		F00DF4912B9E1DB500825462 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F05FB9B62B1145CC00B524ED /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -341,6 +414,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		F00DF48F2B9E1DB500825462 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F00DF4962B9E1DB500825462 /* TrackerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F05FB9B42B1145CC00B524ED /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -354,9 +435,11 @@
 				F09AA7B42B60226B00C15DAB /* CategoryTableViewCell.swift in Sources */,
 				F05FBA132B1FB03D00B524ED /* ScheduleViewController.swift in Sources */,
 				F09AA7B22B5EE37E00C15DAB /* CategoriesViewModel.swift in Sources */,
-				F0F7CF0A2B826D2C00D94FBF /* Model.xcmappingmodel in Sources */,
+				F00DF48E2B9CC3C600825462 /* Filters.swift in Sources */,
+				F00DF4882B991B8C00825462 /* EditIrregularViewController.swift in Sources */,
 				F09AA7AF2B5EE02E00C15DAB /* Observable.swift in Sources */,
 				F09AA7A52B56F74800C15DAB /* UIView+Extensions.swift in Sources */,
+				F00DF4832B98D3C500825462 /* IrregularViewController.swift in Sources */,
 				F05FBA242B2A109D00B524ED /* ColorCollectionViewCell.swift in Sources */,
 				F09AA7AA2B5D6D8B00C15DAB /* TemplateViewController.swift in Sources */,
 				F05FB9D62B16565500B524ED /* UIColor+Extensions.swift in Sources */,
@@ -372,8 +455,10 @@
 				F09AA7A32B55C3DD00C15DAB /* AlertPresenter.swift in Sources */,
 				F05FBA2D2B34ABD800B524ED /* TrackerCategoryStore.swift in Sources */,
 				F05FBA012B1CDFF200B524ED /* HabitViewController.swift in Sources */,
+				F00DF48C2B9B3A0D00825462 /* FilterListViewModel.swift in Sources */,
 				F05FBA292B34961F00B524ED /* TrackerStore.swift in Sources */,
 				F05FB9F92B1906A100B524ED /* Tracker.swift in Sources */,
+				F00DF48A2B9A335500825462 /* FilterListViewController.swift in Sources */,
 				F05FBA192B222BEF00B524ED /* SupplementaryView.swift in Sources */,
 				F05FBA152B20E87200B524ED /* TrackerCollectionViewCell.swift in Sources */,
 				F05FBA272B30CE1F00B524ED /* Model.xcdatamodeld in Sources */,
@@ -383,6 +468,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F00DF4982B9E1DB500825462 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F05FB9B72B1145CC00B524ED /* Tracker */;
+			targetProxy = F00DF4972B9E1DB500825462 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		F05FB9C62B1145D400B524ED /* LaunchScreen.storyboard */ = {
@@ -415,6 +508,44 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		F00DF49A2B9E1DB500825462 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3SG3MUV83U;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = BogdanFartdinov.TrackerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Tracker";
+			};
+			name = Debug;
+		};
+		F00DF49B2B9E1DB500825462 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3SG3MUV83U;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = BogdanFartdinov.TrackerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Tracker";
+			};
+			name = Release;
+		};
 		F05FB9CA2B1145D400B524ED /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -596,6 +727,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		F00DF4992B9E1DB500825462 /* Build configuration list for PBXNativeTarget "TrackerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F00DF49A2B9E1DB500825462 /* Debug */,
+				F00DF49B2B9E1DB500825462 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F05FB9B32B1145CC00B524ED /* Build configuration list for PBXProject "Tracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -620,11 +760,12 @@
 		F05FBA252B30CE1F00B524ED /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				F00DF4842B98EE9900825462 /* Model 4.xcdatamodel */,
 				F0F7CF082B826C9A00D94FBF /* Model 3.xcdatamodel */,
 				F09AA7A12B505F3A00C15DAB /* Model 2.xcdatamodel */,
 				F05FBA262B30CE1F00B524ED /* Model.xcdatamodel */,
 			);
-			currentVersion = F0F7CF082B826C9A00D94FBF /* Model 3.xcdatamodel */;
+			currentVersion = F00DF4842B98EE9900825462 /* Model 4.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

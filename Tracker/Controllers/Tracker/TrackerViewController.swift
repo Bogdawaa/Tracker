@@ -18,8 +18,11 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
     private var alertPresenter: AlertPresenter?
     private var currentDate: Date?
     private var textFilter: String = ""
+    private var selectedFilter = Filters.All
     
     private var categories: [TrackerCategory] = []
+    
+    @Observable
     private var visibleCategories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     private var pinnedTrackers: [Tracker] = []
@@ -28,6 +31,7 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
     private let trackerStore: TrackerStoreProtocol = TrackerStore()
     private let trackerRecordStore: TrackerRecordStoreProtocol = TrackerRecordStore()
     private let uicolormarshaling = UIColorMarshalling()
+    private let filterListViewModel = FilterListViewModel()
     
     private lazy var searchController: UISearchController = {
         let sc = UISearchController(searchResultsController: nil)
@@ -102,6 +106,15 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         return cv
     }()
     
+    private lazy var filterButton: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("filters_button".localized, for: .normal)
+        btn.backgroundColor = .ypBlue
+        btn.layer.cornerRadius = 16
+        btn.addTarget(self, action: #selector(filterBtnAction), for: .touchUpInside)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
     
     // MARK: - Lyfecycle
     override func viewDidLoad() {
@@ -111,6 +124,7 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         trackersCollectionView.delegate = self
 
         trackerStore.setDelegate(self)
+        filterListViewModel.delegate = self
         alertPresenter = AlertPresenter(viewController: self)
         
         //setup
@@ -122,6 +136,8 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         setupSearchController()
         showPlaceholderImage()
         
+        bind()
+        
         view.addHideKeyboardTapGesture()
     }
     
@@ -132,6 +148,7 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         emptyTrackresView.addSubview(emptyTrackersLabel)
         view.addSubview(emptyTrackresView)
         view.addSubview(trackersCollectionView)
+        view.addSubview(filterButton)
         applyConstraints()
     }
     
@@ -179,10 +196,17 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
             trackersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             trackersCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -84)
         ]
+        let filterButtonConstraints = [
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            filterButton.widthAnchor.constraint(equalToConstant: 114),
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ]
         NSLayoutConstraint.activate(emptyTrackresViewConstraints)
         NSLayoutConstraint.activate(emptyTrackersLogoConstrains)
         NSLayoutConstraint.activate(emptyTrackersLabelConstraints)
         NSLayoutConstraint.activate(trackersCollectionViewConstraints)
+        NSLayoutConstraint.activate(filterButtonConstraints)
     }
     
     private func dayOfTheWeek(currentDate: Date) -> String{
@@ -194,11 +218,28 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
     }
     
     private func filterVisibleCategories() {
-        let dayOfTheWeek = dayOfTheWeek(currentDate: currentDate ?? datePicker.date)
         visibleCategories = categories.compactMap { category in
             let trackers = category.trackers.filter { tracker in
-                return (tracker.schedule.contains(dayOfTheWeek) &&
-                        (textFilter.isEmpty || tracker.name.lowercased().contains(textFilter)) /*|| tracker.isPinned == true*/)
+                switch selectedFilter {
+                case .All:
+                    let dayOfTheWeek = dayOfTheWeek(currentDate: currentDate ?? datePicker.date)
+                    return ((tracker.schedule.contains(dayOfTheWeek) &&
+                             (textFilter.isEmpty || tracker.name.lowercased().contains(textFilter)) && tracker.isRegular) || (!tracker.isRegular && !isIrregularTrackerDatePrecede(id: tracker.id)))
+                case .Today:
+                    datePicker.setDate(Date(), animated: true)
+                    currentDate = Date()
+                    let dayOfTheWeek = dayOfTheWeek(currentDate: currentDate ?? datePicker.date)
+                    return ((tracker.schedule.contains(dayOfTheWeek) &&
+                             (textFilter.isEmpty || tracker.name.lowercased().contains(textFilter)) && tracker.isRegular) || (!tracker.isRegular && !isIrregularTrackerDatePrecede(id: tracker.id)))
+                case .Completed:
+                    let dayOfTheWeek = dayOfTheWeek(currentDate: currentDate ?? datePicker.date)
+                    return (((tracker.schedule.contains(dayOfTheWeek) &&
+                              (textFilter.isEmpty || tracker.name.lowercased().contains(textFilter)) && tracker.isRegular) || (!tracker.isRegular && !isIrregularTrackerDatePrecede(id: tracker.id))) && isTrackerCompletedToday(id: tracker.id))
+                case .Uncompleted:
+                    let dayOfTheWeek = dayOfTheWeek(currentDate: currentDate ?? datePicker.date)
+                    return (((tracker.schedule.contains(dayOfTheWeek) &&
+                              (textFilter.isEmpty || tracker.name.lowercased().contains(textFilter)) && tracker.isRegular) || (!tracker.isRegular && !isIrregularTrackerDatePrecede(id: tracker.id))) && !isTrackerCompletedToday(id: tracker.id))
+                }
             }
             if trackers.isEmpty {
                 return nil
@@ -222,6 +263,16 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         }
     }
     
+    private func isIrregularTrackerDatePrecede(id: UUID) -> Bool {
+        completedTrackers.contains { trackerRecord in
+            let isSelectedDayPrecedesCompleted = Calendar.current.compare(
+                datePicker.date,
+                to: trackerRecord.date,
+                toGranularity: .day) == .orderedDescending
+            return isSelectedDayPrecedesCompleted && (trackerRecord.id == id)
+        }
+    }
+    
     private func showPlaceholderImage() {
         if (visibleCategories.count == 0) {
             self.emptyTrackersLogo.image = UIImage(named: "error")
@@ -241,7 +292,8 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
             color: tracker.color,
             emoji: tracker.emoji,
             schedule: tracker.schedule,
-            isPinned: !tracker.isPinned
+            isPinned: !tracker.isPinned,
+            isRegular: tracker.isRegular
         )
         
         try? trackerStore.update(tracker, with: newTracker)
@@ -264,18 +316,35 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
     }
     
     private func editTracker(indexPath: IndexPath) {
-        // открыть экран редактирования
-        let editHabitVC = EditHabitViewController()
-        
         let trackerToChange = visibleCategories[indexPath.section].trackers[indexPath.row]
         let completedDays = completedTrackers.filter { $0.id == trackerToChange.id }.count
-        editHabitVC.trackerVCDelegate = self // ?
-        editHabitVC.setTrackerToChange(
-            tracker: trackerToChange,
-            completedDays: completedDays,
-            category: visibleCategories[indexPath.section]
-        )
-        present(editHabitVC.self, animated: true)
+        
+        if trackerToChange.isRegular {
+            let editHabitVC = EditHabitViewController()
+            editHabitVC.trackerVCDelegate = self
+            editHabitVC.setTrackerToChange(
+                tracker: trackerToChange,
+                completedDays: completedDays,
+                category: visibleCategories[indexPath.section]
+            )
+            present(editHabitVC.self, animated: true)
+        } else {
+            let editIrregularVC = EditIrregularViewController()
+            editIrregularVC.trackerVCDelegate = self
+            editIrregularVC.setTrackerToChange(
+                tracker: trackerToChange,
+                category: visibleCategories[indexPath.section]
+            )
+            present(editIrregularVC.self, animated: true)
+        }
+    }
+    
+    private func bind() {
+        $visibleCategories.bind(action: { [weak self] _ in
+            guard let self = self else { return }
+            
+            (self.visibleCategories.count == 0 && selectedFilter == Filters.All) ? (filterButton.isHidden = true) : (filterButton.isHidden = false)
+        })
     }
     
     // MARK: - DataBase
@@ -324,8 +393,12 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         let habitVC = HabitViewController()
         habitVC.trackerVCDelegate = self
         
+        let irregularVC = IrregularViewController()
+        irregularVC.trackerVCDelegate = self
+        
         let createNewTrackerViewController = CreateNewTrackerViewController()
         createNewTrackerViewController.habitVCToPresent = habitVC
+        createNewTrackerViewController.irregularVCToPresent = irregularVC
         present(createNewTrackerViewController.self, animated: true)
     }
     
@@ -336,8 +409,26 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         df.dateFormat = "dd/MM/yyyy"
         currentDate = selectedDate
 
-        // filter cells
         filterVisibleCategories()
+        
+        if selectedFilter == Filters.Today {
+            selectedFilter = Filters.All
+            filterListViewModel.setSelectedFilter(filterIndex: IndexPath(row: selectedFilter.rawValue, section: 0))
+        }
+    }
+    
+    @objc func filterBtnAction() {
+        let filterListVC = FilterListViewController(viewModel: filterListViewModel)
+        filterListViewModel.delegate = self
+        present(filterListVC.self, animated: true)
+    }
+}
+
+// MARK: - делегат FilterVC
+extension TrackerViewController: FilterListVCDelegate {
+    func setFilter(filter: Filters) {
+        selectedFilter = filter
+        updateVisibleCategories()
     }
 }
 

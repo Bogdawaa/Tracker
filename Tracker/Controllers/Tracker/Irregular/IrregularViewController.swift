@@ -1,27 +1,25 @@
 //
-//  EditHabitViewController.swift
+//  IrregularViewController.swift
 //  Tracker
 //
-//  Created by Bogdan Fartdinov on 25.02.2024.
+//  Created by Bogdan Fartdinov on 06.03.2024.
 //
 
 import UIKit
 
-class EditHabitViewController: UIViewController {
+class IrregularViewController: UIViewController {
 
     weak var trackerVCDelegate: TrackerVCDelegate?
 
     // MARK: - private properties
     private var alertPresenter: AlertPresenter?
     private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
-    private let trackerStore: TrackerStoreProtocol = TrackerStore()
     private let categoriesViewModel = CategoriesViewModel()
 
     
     private var categoryDB: [TrackerCategory] = []
     
     private var trackerNameIsEmpty: Bool = true
-    private var scheduleUpdated: Bool = false
     
     private var selectedEmoji = ""
     private var selectedColor = UIColor.ypBlue
@@ -29,8 +27,6 @@ class EditHabitViewController: UIViewController {
     private var categoriesVC: CategoriesViewController?
     private var selectedCategory: TrackerCategory? = nil
 
-    private var trackerToEdit: Tracker?
-    
     private lazy var scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -45,19 +41,10 @@ class EditHabitViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "edit_habit_title".localized
+        lbl.text = "irregular_title".localized
         lbl.textAlignment = .center
         lbl.textColor = .ypBlack
         lbl.font = .systemFont(ofSize: 16, weight: .medium)
-        lbl.translatesAutoresizingMaskIntoConstraints = false
-        return lbl
-    }()
-    
-    private lazy var completedDaysLabel: UILabel = {
-        let lbl = UILabel()
-        lbl.textAlignment = .center
-        lbl.textColor = .ypBlack
-        lbl.font = .systemFont(ofSize: 32, weight: .bold)
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
@@ -141,7 +128,7 @@ class EditHabitViewController: UIViewController {
         let btn = UIButton()
         btn.backgroundColor = .gray
         btn.layer.cornerRadius = 16
-        btn.setTitle("save_tracker_button".localized, for: .normal)
+        btn.setTitle("create_tracker_button".localized, for: .normal)
         btn.setTitleColor(.white, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.isEnabled = false
@@ -149,20 +136,16 @@ class EditHabitViewController: UIViewController {
         return btn
     }()
     
-    var cellSubtitle = ""
-    private var scheduleVC: ScheduleViewController?
-    
     private var habitButtons = [
         "category_tableview_cell".localized,
-        "schedule_tableview_cell".localized
     ]
-    private var schedule: [Int] = []
-    private var emojiArr = [
+    private let schedule: [Int] = [0, 1, 2, 3, 4, 5, 6] // для нерегулярного события в расписании выделены все дни
+    private let emojiArr = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
         "😇", "😡", "🥶", "🤔", "🙌", "🍔",
         "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
     ]
-    private var trackColorArr: [UIColor] = [
+    private let trackColorArr: [UIColor] = [
         UIColor(red: 253/255, green: 76/255, blue: 73/255, alpha: 1), // red
         UIColor(red: 255/255, green: 136/255, blue: 30/255, alpha: 1), // orange
         UIColor(red: 0/255, green: 123/255, blue: 250/255, alpha: 1), // blue
@@ -210,9 +193,6 @@ class EditHabitViewController: UIViewController {
         categoriesVC = CategoriesViewController(viewModel: categoriesViewModel)
         categoriesViewModel.habitVCDelegate = self
         
-        scheduleVC = ScheduleViewController()
-        scheduleVC?.scheduleDelegate = self
-        
         view.addHideKeyboardTapGesture()
         
         do {
@@ -233,20 +213,10 @@ class EditHabitViewController: UIViewController {
         containerView.addSubview(colorsCollectionView)
         containerView.addSubview(cancelBtn)
         containerView.addSubview(createHabitlBtn)
-        view.addSubview(completedDaysLabel)
         view.addSubview(scrollView)
     }
     
     private func applyConstraints() {
-        let titleLabelConstraints = [
-            titleLabel.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 30),
-            titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            titleLabel.heightAnchor.constraint(equalToConstant: 22)
-        ]
-        let completedDaysLabelConstraints = [
-            completedDaysLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            completedDaysLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38)
-        ]
         let scrollViewConstraints = [
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -259,8 +229,13 @@ class EditHabitViewController: UIViewController {
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
         ]
+        let titleLabelConstraints = [
+            titleLabel.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 30),
+            titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            titleLabel.heightAnchor.constraint(equalToConstant: 22)
+        ]
         let trackerNameTextFieldConstraints = [
-            trackerNameTextField.topAnchor.constraint(equalTo: completedDaysLabel.bottomAnchor, constant: 40),
+            trackerNameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
             trackerNameTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             trackerNameTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             trackerNameTextField.heightAnchor.constraint(equalToConstant: 75)
@@ -269,7 +244,7 @@ class EditHabitViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: trackerNameTextField.bottomAnchor, constant: 24),
             tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            tableView.heightAnchor.constraint(equalToConstant: 150)
+            tableView.heightAnchor.constraint(equalToConstant: 75)
         ]
         let emojiCollectionViewConstraints = [
             emojiCollectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 32),
@@ -298,7 +273,6 @@ class EditHabitViewController: UIViewController {
             createHabitlBtn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             createHabitlBtn.heightAnchor.constraint(equalToConstant: 60)
         ]
-        NSLayoutConstraint.activate(completedDaysLabelConstraints)
         NSLayoutConstraint.activate(scrollViewConstraints)
         NSLayoutConstraint.activate(containerViewConstraints)
         NSLayoutConstraint.activate(titleLabelConstraints)
@@ -310,44 +284,8 @@ class EditHabitViewController: UIViewController {
         NSLayoutConstraint.activate(createHabitBtnConstraints)
     }
     
-    func setTrackerToChange(tracker: Tracker, completedDays: Int, category: TrackerCategory) {
-        trackerToEdit = tracker
-        trackerNameTextField.text = tracker.name
-        trackerNameIsEmpty = false // ?
-
-        let completedDaysLocalized = String.localizedStringWithFormat(
-            NSLocalizedString("number_of_days", comment: "Number of days with completed Tracker"),
-            completedDays
-        )
-        completedDaysLabel.text = completedDaysLocalized
-        
-        schedule = convertScheduleStringToInt(scheduleStr: tracker.schedule)
-        selectedColor = tracker.color
-        selectedEmoji = tracker.emoji
-        selectedCategory = category
-    }
-    
-    // генерит сабтайтл для ячейки расписания
-    private func createSubtitle() -> String {
-        cellSubtitle = ""
-        
-        if schedule.count > 0 {
-            for day in schedule.sorted() {
-                cellSubtitle.append(WeekDay(id: day)?.rawValue ?? "")
-                cellSubtitle.append(", ")
-            }
-        }
-        if schedule.count == 7 {
-            cellSubtitle = "everyday_switch".localized
-            return cellSubtitle
-        }
-        cellSubtitle = String(cellSubtitle.dropLast(2))
-        return cellSubtitle
-    }
-    
     private func shouldEnableButton() {
-        // TODO: -  включение выключение кнопки "создать" если название трекера изменилось (работает даже если пустое)
-        if (scheduleUpdated || trackerToEdit?.schedule != "") && (!trackerNameIsEmpty /*|| trackerNameTextField.text != ""*/) && selectedCategory != nil {
+        if !trackerNameIsEmpty && selectedCategory != nil {
             createHabitlBtn.backgroundColor = .ypBlack
             createHabitlBtn.isEnabled = true
         } else {
@@ -372,42 +310,27 @@ class EditHabitViewController: UIViewController {
     
     @objc func createHabitBtnAction() {
         guard let trackerName = trackerNameTextField.text,
-            let selectedCategory = selectedCategory,
-            let trackerToEdit = trackerToEdit  else { return }
-        
+            let selectedCategory = selectedCategory else { return }
+                
         let tracker = Tracker(
-            id: trackerToEdit.id,
+            id: UUID(),
             name: trackerName,
             color: selectedColor,
             emoji: selectedEmoji,
             schedule: schedule.map { WeekDay(id: $0)?.rawValue ?? "" }.joined(separator: ", "),
-            isPinned: trackerToEdit.isPinned,
-            isRegular: true
+            isPinned: false,
+            isRegular: false
         )
-        try? trackerStore.delete(trackerToEdit)
         trackerVCDelegate?.add(tracker, category: selectedCategory)
         trackerVCDelegate?.updateVisibleCategories()
         trackerVCDelegate?.setupCollectionView()
-        self.presentingViewController?.dismiss(animated: true)
+        self.presentingViewController?.presentingViewController?.dismiss(animated: true)
     }
 }
 
-
-// MARK: - работа с делегатом расписания
-extension EditHabitViewController: ScheduleDelegate {
-    func updateSchedule(schedule: [Int]) {
-        self.schedule = schedule
-        self.scheduleUpdated = true
-        self.shouldEnableButton()
-    }
-    
-    func updateTable() {
-        self.tableView.reloadData()
-    }
-}
 
 // MARK: - работа с делегатом экрана категорий
-extension EditHabitViewController: HabitVCDelegate {
+extension IrregularViewController: HabitVCDelegate {
     func getSelectedCategory(category: TrackerCategory?) {
         self.selectedCategory = category
         tableView.reloadData()
@@ -415,7 +338,7 @@ extension EditHabitViewController: HabitVCDelegate {
 }
 
 // MARK: - работа с таблицей
-extension EditHabitViewController: UITableViewDelegate, UITableViewDataSource {
+extension IrregularViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return habitButtons.count
     }
@@ -427,8 +350,6 @@ extension EditHabitViewController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.row == 0 {
             cell.detailTextLabel?.text = selectedCategory?.category
             cell.separatorInset = .zero
-        } else if indexPath.row == 1 {
-            cell.detailTextLabel?.text = createSubtitle()
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell.bounds.size.width * 2)
         }
         cell.textLabel?.text = habitButtons[indexPath.row]
@@ -447,18 +368,7 @@ extension EditHabitViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.row {
         case 0:
             guard let categoriesVC = categoriesVC else { return }
-            
-            let selectedIndex = categoryDB.firstIndex(where: { $0.category == self.selectedCategory?.category })
-            categoriesVC.viewModel.selectedCellIndex = IndexPath(row: selectedIndex!, section: 0)
-            
             self.present(categoriesVC, animated: true)
-        case 1:
-            guard let scheduleVC = scheduleVC else {
-                assert(scheduleVC == nil, "scheduleVC is nill")
-                return
-            }
-            scheduleVC.setupSchedule(with: schedule)
-            self.present(scheduleVC, animated: true)
         default:
             return
         }
@@ -466,7 +376,7 @@ extension EditHabitViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 // MARK: - работа с textfield
-extension EditHabitViewController: UITextFieldDelegate {
+extension IrregularViewController: UITextFieldDelegate {
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let maxLength = 38
         let currentString = (trackerNameTextField.text ?? "") as NSString
@@ -477,7 +387,7 @@ extension EditHabitViewController: UITextFieldDelegate {
 }
 
 // MARK: - работа с collectionview
-extension EditHabitViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension IrregularViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.emojiCollectionView {
             return emojiArr.count
@@ -577,3 +487,5 @@ extension EditHabitViewController: UICollectionViewDelegate, UICollectionViewDat
         }
     }
 }
+
+

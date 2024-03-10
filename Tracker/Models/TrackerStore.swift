@@ -89,6 +89,7 @@ final class TrackerStore: NSObject {
         let color = uiColorMarshalling.color(from: colorString)
         let schedule = trackerCoreData.schedule
         let isPinned = trackerCoreData.isPinned
+        let isRegular = trackerCoreData.isRegular
         
         return Tracker(
             id: id,
@@ -96,7 +97,8 @@ final class TrackerStore: NSObject {
             color: color,
             emoji: emoji,
             schedule: schedule ?? "",
-            isPinned: isPinned
+            isPinned: isPinned,
+            isRegular: isRegular
         )
     }
     
@@ -110,6 +112,7 @@ final class TrackerStore: NSObject {
         trackerCoreData.name = tracker.name
         trackerCoreData.schedule = tracker.schedule
         trackerCoreData.isPinned = tracker.isPinned
+        trackerCoreData.isRegular = tracker.isRegular
         trackerCoreData.category = trackerCategoryCoreData
         try context.save()
     }
@@ -123,6 +126,7 @@ final class TrackerStore: NSObject {
             trackerCoreData.name = newTracker.name
             trackerCoreData.schedule = newTracker.schedule
             trackerCoreData.isPinned = newTracker.isPinned
+            trackerCoreData.isRegular = newTracker.isRegular
         }
         try context.save()
     }

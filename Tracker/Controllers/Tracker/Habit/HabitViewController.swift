@@ -351,7 +351,8 @@ class HabitViewController: UIViewController {
             color: selectedColor,
             emoji: selectedEmoji,
             schedule: schedule.map { WeekDay(id: $0)?.rawValue ?? "" }.joined(separator: ", "),
-            isPinned: false
+            isPinned: false,
+            isRegular: true
         )
         trackerVCDelegate?.add(tracker, category: selectedCategory)
         trackerVCDelegate?.updateVisibleCategories()
