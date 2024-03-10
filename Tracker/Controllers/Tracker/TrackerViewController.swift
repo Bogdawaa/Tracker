@@ -46,7 +46,7 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         btn.image = UIImage(named: "addButton")
         btn.style = .plain
         btn.target = nil
-        btn.tintColor = .black
+        btn.tintColor = .ypBlack
         btn.target = self
         btn.action = #selector(addButtonAction(sender:))
         return btn
@@ -141,15 +141,18 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         view.addHideKeyboardTapGesture()
     }
     
+    
     // MARK: - Setup
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.systemBackground
         emptyTrackresView.addSubview(emptyTrackersLogo)
         emptyTrackresView.addSubview(emptyTrackersLabel)
         view.addSubview(emptyTrackresView)
         view.addSubview(trackersCollectionView)
         view.addSubview(filterButton)
         applyConstraints()
+        
+        (self.visibleCategories.count == 0 && selectedFilter == Filters.All) ? (filterButton.isHidden = true) : (filterButton.isHidden = false)
     }
     
     private func setupTabBar() {
@@ -473,9 +476,7 @@ extension TrackerViewController: TrackerCellDelegate {
         }
         for record in recordsToRemove {
             do {
-                let tracker = try trackerRecordStore.fetchTrackerRecordCoreData(for: record.id, by: record.date)
-                guard let tracker1 = tracker else { return }
-                try trackerRecordStore.deleteRecord(tracker1)
+                try trackerRecordStore.deleteRecord(record)
             } catch {
                 alertPresenter?.showAlert(in: self, error: error)
             }
@@ -587,10 +588,12 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
                     
                     let alert = UIAlertController(title: "", message: "Уверены что хотите удалить трекер?", preferredStyle: .actionSheet)
 
-                        alert.addAction(UIAlertAction(title: "Удалить", style: .destructive , handler:{ _ in
-                            try? self.trackerStore.delete(tracker)
-                            self.updateVisibleCategories()
-                        }))
+                    alert.addAction(UIAlertAction(title: "Удалить", style: .destructive , handler: { [weak self] _ in
+                        guard let self = self else { return }
+                        try? self.trackerStore.delete(tracker)
+                        try? self.trackerRecordStore.deleteRecord(completedTrackers[indexPath.row])
+                        self.updateVisibleCategories()
+                    }))
                         
                         alert.addAction(UIAlertAction(title: "Отменить", style: .cancel , handler: nil ))
                     self.present(alert, animated: true, completion: nil)
