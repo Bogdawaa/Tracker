@@ -55,7 +55,7 @@ final class FilterListViewController: UIViewController, FilterListViewModelProto
         filtersTableView.delegate = self
         
         applyConstraints()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
     }
     
     

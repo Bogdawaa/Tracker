@@ -50,11 +50,12 @@ enum WeekDay: String, CaseIterable, Codable {
     }
 }
 
-func convertScheduleStringToInt(scheduleStr: String) -> [Int]{
+func convertScheduleStringToInt(scheduleStr: String) -> [Int] {
     var arrInt: [Int] = []
     let daysStringArr = scheduleStr.components(separatedBy: ",")
     for day in daysStringArr {
-        switch day {
+        let trimmedDay = day.trimmingCharacters(in: .whitespaces)
+        switch trimmedDay {
         case "Пн":
             arrInt.append(0)
         case "Вт":
@@ -70,7 +71,7 @@ func convertScheduleStringToInt(scheduleStr: String) -> [Int]{
         case "Вс":
             arrInt.append(6)
         default:
-            return []
+            continue
         }
     }
     return arrInt

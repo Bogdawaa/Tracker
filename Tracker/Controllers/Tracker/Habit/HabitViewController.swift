@@ -219,7 +219,6 @@ class HabitViewController: UIViewController {
     
     // MARK: - private methods
     private func setupView() {
-        view.backgroundColor = .white
         scrollView.addSubview(containerView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(trackerNameTextField)
@@ -229,6 +228,7 @@ class HabitViewController: UIViewController {
         containerView.addSubview(cancelBtn)
         containerView.addSubview(createHabitlBtn)
         view.addSubview(scrollView)
+        view.backgroundColor = .systemBackground
     }
     
     private func applyConstraints() {
@@ -320,15 +320,28 @@ class HabitViewController: UIViewController {
     private func shouldEnableButton() {
         if scheduleUpdated && !trackerNameIsEmpty && selectedCategory != nil {
             createHabitlBtn.backgroundColor = .ypBlack
+            createHabitlBtn.setTitleColor(.systemBackground, for: .normal)
             createHabitlBtn.isEnabled = true
         } else {
             createHabitlBtn.backgroundColor = .gray
+            createHabitlBtn.setTitleColor(.white, for: .normal)
             createHabitlBtn.isEnabled = false
         }
     }
     
+    private func clearData() {
+        schedule = []
+        trackerNameTextField.text = ""
+        selectedColor = UIColor()
+        selectedEmoji = ""
+        selectedCategory = nil
+        shouldEnableButton()
+        tableView.reloadData()
+    }
+    
     // MARK: - actions
     @objc func cancelBtnAction() {
+        clearData()
         self.dismiss(animated: true)
     }
     
@@ -379,6 +392,7 @@ extension HabitViewController: ScheduleDelegate {
 extension HabitViewController: HabitVCDelegate {
     func getSelectedCategory(category: TrackerCategory?) {
         self.selectedCategory = category
+        shouldEnableButton()
         tableView.reloadData()
     }
 }

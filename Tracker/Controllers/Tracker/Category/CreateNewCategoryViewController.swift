@@ -42,6 +42,7 @@ class CreateNewCategoryViewController: UIViewController, UITextFieldDelegate {
         btn.layer.cornerRadius = 16
         btn.addTarget(self, action: #selector(addCategoryBtnAction), for: .touchUpInside)
         btn.setTitle("add_new_category_button".localized, for: .normal)
+        btn.setTitleColor(.systemBackground, for: .normal)
         btn.isEnabled = false
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
@@ -68,7 +69,7 @@ class CreateNewCategoryViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - Setup
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         view.addSubview(titleLabel)
         view.addSubview(categoryNameTextField)
         view.addSubview(addCategoryBtn)

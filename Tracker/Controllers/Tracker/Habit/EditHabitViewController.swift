@@ -142,7 +142,7 @@ class EditHabitViewController: UIViewController {
         btn.backgroundColor = .gray
         btn.layer.cornerRadius = 16
         btn.setTitle("save_tracker_button".localized, for: .normal)
-        btn.setTitleColor(.white, for: .normal)
+        btn.setTitleColor(.systemBackground, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.isEnabled = false
         btn.addTarget(self, action: #selector(createHabitBtnAction), for: .touchUpInside)
@@ -224,7 +224,7 @@ class EditHabitViewController: UIViewController {
     
     // MARK: - private methods
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         scrollView.addSubview(containerView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(trackerNameTextField)

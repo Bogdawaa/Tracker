@@ -164,7 +164,8 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
     private func setupNavBar() {
         navigationItem.title = "main_title" .localized
         navigationItem.leftBarButtonItem = addButton
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
+        let btn = UIBarButtonItem(customView: datePicker)
+        navigationItem.rightBarButtonItem = btn
         navigationItem.searchController = searchController
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationItem.searchController?.hidesNavigationBarDuringPresentation = false
@@ -512,7 +513,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         if !trackers.isEmpty {
             let tracker = trackers[indexPath.row]
             
-            collectionView.backgroundColor = .white
+            collectionView.backgroundColor = .systemBackground
             
             let isCompletedToday = isTrackerCompletedToday(id: tracker.id)
             let completedDays = completedTrackers.filter { $0.id == tracker.id }.count

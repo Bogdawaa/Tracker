@@ -56,6 +56,7 @@ final class CategoriesViewController: UIViewController, CategoriesViewModelProto
         btn.layer.cornerRadius = 16
         btn.addTarget(self, action: #selector(addNewCategoryBtnAction), for: .touchUpInside)
         btn.setTitle("new_category_button".localized, for: .normal)
+        btn.setTitleColor(.systemBackground, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
@@ -98,7 +99,7 @@ final class CategoriesViewController: UIViewController, CategoriesViewModelProto
     
     // MARK: - Setup
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         view.addSubview(titleLabel)
         emptyTrackresView.addSubview(emptyTrackersLogo)
         emptyTrackresView.addSubview(emptyTrackersLabel)

@@ -41,6 +41,7 @@ class ScheduleViewController: UIViewController {
         btn.backgroundColor = .ypBlack
         btn.layer.cornerRadius = 16
         btn.addTarget(self, action: #selector(applyScheduleBtnAction), for: .touchUpInside)
+        btn.setTitleColor(.systemBackground, for: .normal)
         btn.setTitle("applyScheduleBtn".localized, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
@@ -79,7 +80,7 @@ class ScheduleViewController: UIViewController {
     
     // MARK: - private methods
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         view.addSubview(titleLabel)
         view.addSubview(scheduleTableView)
         view.addSubview(applyScheduleBtn)
