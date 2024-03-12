@@ -14,6 +14,7 @@
 		F00DF48E2B9CC3C600825462 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00DF48D2B9CC3C600825462 /* Filters.swift */; };
 		F00DF4962B9E1DB500825462 /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00DF4952B9E1DB500825462 /* TrackerTests.swift */; };
 		F00DF49E2B9E22A400825462 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = F00DF49D2B9E22A400825462 /* SnapshotTesting */; };
+		F00DF4A42BA0FC8200825462 /* EditCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00DF4A32BA0FC8200825462 /* EditCategoryViewController.swift */; };
 		F05FB9BC2B1145CD00B524ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05FB9BB2B1145CD00B524ED /* AppDelegate.swift */; };
 		F05FB9BE2B1145CD00B524ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05FB9BD2B1145CD00B524ED /* SceneDelegate.swift */; };
 		F05FB9C02B1145CD00B524ED /* TrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05FB9BF2B1145CD00B524ED /* TrackerViewController.swift */; };
@@ -72,6 +73,7 @@
 		F00DF48D2B9CC3C600825462 /* Filters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		F00DF4932B9E1DB500825462 /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F00DF4952B9E1DB500825462 /* TrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
+		F00DF4A32BA0FC8200825462 /* EditCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCategoryViewController.swift; sourceTree = "<group>"; };
 		F05FB9B82B1145CD00B524ED /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F05FB9BB2B1145CD00B524ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F05FB9BD2B1145CD00B524ED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -295,6 +297,7 @@
 			children = (
 				F05FBA102B1F977E00B524ED /* CategoriesViewController.swift */,
 				F09AA7AB2B5ECC2300C15DAB /* CreateNewCategoryViewController.swift */,
+				F00DF4A32BA0FC8200825462 /* EditCategoryViewController.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -464,6 +467,7 @@
 				F05FBA2D2B34ABD800B524ED /* TrackerCategoryStore.swift in Sources */,
 				F05FBA012B1CDFF200B524ED /* HabitViewController.swift in Sources */,
 				F00DF48C2B9B3A0D00825462 /* FilterListViewModel.swift in Sources */,
+				F00DF4A42BA0FC8200825462 /* EditCategoryViewController.swift in Sources */,
 				F05FBA292B34961F00B524ED /* TrackerStore.swift in Sources */,
 				F05FB9F92B1906A100B524ED /* Tracker.swift in Sources */,
 				F00DF48A2B9A335500825462 /* FilterListViewController.swift in Sources */,

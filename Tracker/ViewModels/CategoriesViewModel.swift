@@ -5,15 +5,21 @@
 //  Created by Bogdan Fartdinov on 22.01.2024.
 //
 
-import Foundation
+import UIKit
 
 protocol HabitVCDelegate: AnyObject {
     func getSelectedCategory(category: TrackerCategory?)
 }
 
+protocol CategoriesViewModeDelegate: AnyObject {
+    func showVC(vc: UIViewController)
+}
+
 final class CategoriesViewModel {
     
     weak var habitVCDelegate: HabitVCDelegate?
+    weak var delegate: CategoriesViewModeDelegate?
+    
     var selectedCellIndex: IndexPath?
     let trackerCategoryStore: TrackerCategoryStoreProtocol
     
@@ -53,6 +59,19 @@ final class CategoriesViewModel {
     func setSelectedCategory(categoryIndex: IndexPath) {
         selectedCategory = categories[categoryIndex.row]
         habitVCDelegate?.getSelectedCategory(category: selectedCategory)
+    }
+    
+    func editCategory(_ indexPath: IndexPath) {
+        let category = categories[indexPath.row]
+        let editCategoryVC = EditCategoryViewController(trackerCategoryStore: trackerCategoryStore)
+        editCategoryVC.setupScreen(with: category)
+        delegate?.showVC(vc: editCategoryVC)
+    }
+    
+    func deleteCategory(_ indexPath: IndexPath) {
+        let category = categories[indexPath.row]
+        try? self.trackerCategoryStore.delete(trackerCategory: category)
+        getCategories()
     }
 }
 

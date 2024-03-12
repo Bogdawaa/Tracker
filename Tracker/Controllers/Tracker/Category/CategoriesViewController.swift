@@ -91,6 +91,8 @@ final class CategoriesViewController: UIViewController, CategoriesViewModelProto
         setupView()
         applyConstraints()
         bind()
+        
+        viewModel.delegate = self
         viewModel.getCategories()
     }
     
@@ -209,5 +211,34 @@ extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.reloadData()
         viewModel.setSelectedCategory(categoryIndex: indexPath)
         dismiss(animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(actionProvider:  { actionProvider in
+            return UIMenu(children: [
+                UIAction(title: "Редактировать", handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    viewModel.editCategory(indexPath)
+                }),
+                UIAction(title: "Удалить", attributes: .destructive, handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    
+                    let alert = UIAlertController(title: "", message: "Эта категория точно не нужна?", preferredStyle: .actionSheet)
+
+                    alert.addAction(UIAlertAction(title: "Удалить", style: .destructive , handler: { [weak self] _ in
+                        guard let self = self else { return }
+                        viewModel.deleteCategory(indexPath)
+                    }))
+                    alert.addAction(UIAlertAction(title: "Отменить", style: .cancel , handler: nil ))
+                    self.present(alert, animated: true, completion: nil)
+                }),
+            ])
+        })
+    }
+}
+
+extension CategoriesViewController: CategoriesViewModeDelegate {
+    func showVC(vc: UIViewController) {
+        present(vc.self, animated: true)
     }
 }

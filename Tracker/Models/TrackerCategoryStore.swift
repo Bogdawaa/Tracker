@@ -18,6 +18,8 @@ protocol TrackerCategoryStoreProtocol {
     func fetchCategories() throws -> [TrackerCategory]
     func addNewCategory(_ trackerCategory: TrackerCategory) throws
     func removeTracker(tracker: Tracker, category: TrackerCategory) throws
+    func update(trackerCategory: TrackerCategory, with categoryName: String) throws
+    func delete(trackerCategory: TrackerCategory) throws
 }
 
 struct TrackerCategoryStoreUpdate {
@@ -110,7 +112,6 @@ final class TrackerCategoryStore: NSObject {
     }
     
     private func removeTrackerFromCategory(tracker: Tracker, category: TrackerCategory) {
-        // протестить нормально ли работает??
         let trackerCategoryCoreData = try? fetchSingleCategoryCoreData(for: category)
         
         let trackerCoreData = TrackerCoreData(context: context)
@@ -127,6 +128,22 @@ final class TrackerCategoryStore: NSObject {
             trackerCategoryCoreData.removeFromTrackers(trackerCoreData)
         }
     }
+    
+    private func updateCategory(trackerCategory: TrackerCategory, with categoryName: String) throws {
+        let trackerCategoryCoreData = try? fetchSingleCategoryCoreData(for: trackerCategory)
+        if let trackerCategoryCoreData = trackerCategoryCoreData {
+            trackerCategoryCoreData.category = categoryName
+        }
+        try context.save()
+    }
+    
+    private func deleteCategory(trackerCategory: TrackerCategory) throws {
+        let trackerCategoryCoreData = try? fetchSingleCategoryCoreData(for: trackerCategory)
+        guard let trackerCategoryCoreData = trackerCategoryCoreData else { return }
+        context.delete(trackerCategoryCoreData)
+        try context.save()
+    }
+    
 }
 
 extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
@@ -146,8 +163,17 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
     func fetchSingleCategoryCoreData(for category: TrackerCategory) throws -> TrackerCategoryCoreData {
         try fetchSingleCategory(for: category)
     }
+    
     func removeTracker(tracker: Tracker, category: TrackerCategory) throws {
         try removeTrackerFromCategory(tracker: tracker, category: category)
+    }
+    
+    func update(trackerCategory: TrackerCategory, with categoryName: String) throws {
+        try updateCategory(trackerCategory: trackerCategory, with: categoryName)
+    }
+    
+    func delete(trackerCategory: TrackerCategory) throws {
+        try deleteCategory(trackerCategory: trackerCategory)
     }
 }
 
