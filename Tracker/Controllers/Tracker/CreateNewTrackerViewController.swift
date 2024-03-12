@@ -33,7 +33,7 @@ class CreateNewTrackerViewController: UIViewController {
     private lazy var habitBtn: UIButton = {
         let btn = UIButton()
         btn.backgroundColor = .ypBlack
-        btn.setTitleColor(.white, for: .normal)
+        btn.setTitleColor(.systemBackground, for: .normal)
         btn.setTitle("button_habit".localized, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.layer.cornerRadius = 16
@@ -44,7 +44,7 @@ class CreateNewTrackerViewController: UIViewController {
     private lazy var irregularBtn: UIButton = {
         let btn = UIButton()
         btn.backgroundColor = .ypBlack
-        btn.setTitleColor(.white, for: .normal)
+        btn.setTitleColor(.systemBackground, for: .normal)
         btn.setTitle("button_irregular".localized, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.layer.cornerRadius = 16
@@ -63,7 +63,7 @@ class CreateNewTrackerViewController: UIViewController {
     
     // MARK: - private methods
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.systemBackground
         view.addSubview(titleLabel)
         containerView.addSubview(habitBtn)
         containerView.addSubview(irregularBtn)

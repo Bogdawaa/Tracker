@@ -13,8 +13,11 @@ protocol CategoriesViewModelProtocol {
 
 final class CategoriesViewController: UIViewController, CategoriesViewModelProtocol {
     
-    // MARK: - private properties
     var viewModel: CategoriesViewModel
+    
+    // MARK: - private properties
+    
+    private var trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
     
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
@@ -54,6 +57,7 @@ final class CategoriesViewController: UIViewController, CategoriesViewModelProto
         let btn = UIButton()
         btn.backgroundColor = .ypBlack
         btn.layer.cornerRadius = 16
+        btn.setTitleColor(.systemBackground, for: .normal)
         btn.addTarget(self, action: #selector(addNewCategoryBtnAction), for: .touchUpInside)
         btn.setTitle("new_category_button".localized, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -91,6 +95,11 @@ final class CategoriesViewController: UIViewController, CategoriesViewModelProto
         setupView()
         applyConstraints()
         bind()
+        
+//        categoriesTableView.delegate = self
+//        categoriesTableView.dataSource = self
+        
+        viewModel.delegate = self
         viewModel.getCategories()
     }
     
@@ -104,6 +113,7 @@ final class CategoriesViewController: UIViewController, CategoriesViewModelProto
         view.addSubview(categoriesTableView)
         view.addSubview(addNewCategoryBtn)
         applyConstraints()
+        view.backgroundColor = .systemBackground
     }
     
     private func applyConstraints() {
@@ -152,11 +162,11 @@ final class CategoriesViewController: UIViewController, CategoriesViewModelProto
     private func bind() {
         viewModel.$categories.bind(action: { [weak self] _ in
             guard let self = self else { return }
-            self.categoriesTableView.reloadData()
+            categoriesTableView.reloadData()
         })
         viewModel.$isCategoriesEmpty.bind(action: { [weak self] newValue in
             guard let self = self else { return }
-            self.setCategoriesTableView(isEmpty: newValue)
+            setCategoriesTableView(isEmpty: newValue)
         })
     }
     
@@ -169,6 +179,7 @@ final class CategoriesViewController: UIViewController, CategoriesViewModelProto
         cell.layer.cornerRadius = 16
         cell.layer.maskedCorners = mask
     }
+
     
     // MARK: - actions
     @objc private func addNewCategoryBtnAction() {
@@ -209,5 +220,37 @@ extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.reloadData()
         viewModel.setSelectedCategory(categoryIndex: indexPath)
         dismiss(animated: true)
+    }
+    
+    // MARK: - контекстное меню
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+//        let category = viewModel.categories[indexPath.row]
+        
+        return UIContextMenuConfiguration(actionProvider:  { actionProvider in
+            return UIMenu(children: [
+                UIAction(title: "Редактировать", handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    viewModel.editCategory(indexPath)
+                }),
+                UIAction(title: "Удалить", attributes: .destructive, handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    
+                    let alert = UIAlertController(title: "", message: "Эта категория точно не нужна?", preferredStyle: .actionSheet)
+                    
+                    alert.addAction(UIAlertAction(title: "Удалить", style: .destructive , handler: { [weak self] _ in
+                        guard let self = self else { return }
+                        viewModel.deleteCategory(indexPath: indexPath)
+                    }))
+                    alert.addAction(UIAlertAction(title: "Отменить", style: .cancel , handler: nil ))
+                    self.present(alert, animated: true, completion: nil)
+                }),
+            ])
+        })
+    }
+}
+
+extension CategoriesViewController: CategoriesViewModelDelegate {
+    func showVC(vc: UIViewController) {
+        present(vc.self, animated: true)
     }
 }

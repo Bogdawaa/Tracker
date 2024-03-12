@@ -18,10 +18,13 @@ protocol TrackerCategoryStoreProtocol {
     func fetchCategories() throws -> [TrackerCategory]
     func addNewCategory(_ trackerCategory: TrackerCategory) throws
     func removeTracker(tracker: Tracker, category: TrackerCategory) throws
+    func update(trackerCategory: TrackerCategory, with categoryName: String) throws
+    func delete(trackerCategory: TrackerCategory) throws
 }
 
 struct TrackerCategoryStoreUpdate {
     let insertedIndexPaths: [IndexPath]
+    let deletedIndexPaths: [IndexPath]
 }
 
 private enum TrackerCategoryStoreError: Error {
@@ -43,6 +46,8 @@ final class TrackerCategoryStore: NSObject {
     }()
     
     private var insertedIndexPaths: [IndexPath] = []
+    private var deletedIndexPaths: [IndexPath] = []
+
     
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData> = {
         let fetchRequest = TrackerCategoryCoreData.fetchRequest()
@@ -110,7 +115,6 @@ final class TrackerCategoryStore: NSObject {
     }
     
     private func removeTrackerFromCategory(tracker: Tracker, category: TrackerCategory) {
-        // протестить нормально ли работает??
         let trackerCategoryCoreData = try? fetchSingleCategoryCoreData(for: category)
         
         let trackerCoreData = TrackerCoreData(context: context)
@@ -126,6 +130,21 @@ final class TrackerCategoryStore: NSObject {
             trackerCategoryCoreData.category = category.category
             trackerCategoryCoreData.removeFromTrackers(trackerCoreData)
         }
+    }
+    
+    private func updateCategory(trackerCategory: TrackerCategory, with categoryName: String) throws {
+        let trackerCategoryCoreData = try? fetchSingleCategoryCoreData(for: trackerCategory)
+        if let trackerCategoryCoreData = trackerCategoryCoreData {
+            trackerCategoryCoreData.category = categoryName
+        }
+        try context.save()
+    }
+    
+    private func deleteCategory(trackerCategory: TrackerCategory) throws {
+        let trackeCategoryCoreData = try? fetchSingleCategoryCoreData(for: trackerCategory)
+        guard let trackeCategoryCoreData = trackeCategoryCoreData else { return }
+        context.delete(trackeCategoryCoreData)
+        try context.save()
     }
 }
 
@@ -147,7 +166,15 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
         try fetchSingleCategory(for: category)
     }
     func removeTracker(tracker: Tracker, category: TrackerCategory) throws {
-        try removeTrackerFromCategory(tracker: tracker, category: category)
+        removeTrackerFromCategory(tracker: tracker, category: category)
+    }
+    
+    func update(trackerCategory: TrackerCategory, with categoryName: String) throws {
+        try updateCategory(trackerCategory: trackerCategory, with: categoryName)
+    }
+    
+    func delete(trackerCategory: TrackerCategory) throws {
+        try deleteCategory(trackerCategory: trackerCategory)
     }
 }
 
@@ -155,15 +182,18 @@ extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         insertedIndexPaths.removeAll()
+        deletedIndexPaths.removeAll()
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         delegate?.didUpdate(
             TrackerCategoryStoreUpdate(
-                insertedIndexPaths: insertedIndexPaths
+                insertedIndexPaths: insertedIndexPaths,
+                deletedIndexPaths: deletedIndexPaths
             )
         )
         insertedIndexPaths.removeAll()
+        deletedIndexPaths.removeAll()
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
@@ -171,6 +201,10 @@ extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
         case .insert:
             if let indexPath = newIndexPath {
                 insertedIndexPaths.append(indexPath)
+            }
+        case .delete:
+            if let indexPath = newIndexPath {
+                deletedIndexPaths.append(indexPath)
             }
         default:
             break

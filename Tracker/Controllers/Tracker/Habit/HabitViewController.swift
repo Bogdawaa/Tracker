@@ -124,7 +124,7 @@ class HabitViewController: UIViewController {
         btn.layer.borderColor = redColor
         btn.layer.borderWidth = 1
         btn.layer.cornerRadius = 16
-        btn.backgroundColor = .white
+        btn.backgroundColor = .systemBackground
         btn.setTitle("cancel_button".localized , for: .normal)
         btn.setTitleColor(.ypRed, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -137,7 +137,7 @@ class HabitViewController: UIViewController {
         btn.backgroundColor = .gray
         btn.layer.cornerRadius = 16
         btn.setTitle("create_tracker_button".localized, for: .normal)
-        btn.setTitleColor(.white, for: .normal)
+        btn.setTitleColor(.systemBackground, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.isEnabled = false
         btn.addTarget(self, action: #selector(createHabitBtnAction), for: .touchUpInside)
@@ -229,6 +229,7 @@ class HabitViewController: UIViewController {
         containerView.addSubview(cancelBtn)
         containerView.addSubview(createHabitlBtn)
         view.addSubview(scrollView)
+        view.backgroundColor = .systemBackground
     }
     
     private func applyConstraints() {
@@ -320,15 +321,26 @@ class HabitViewController: UIViewController {
     private func shouldEnableButton() {
         if scheduleUpdated && !trackerNameIsEmpty && selectedCategory != nil {
             createHabitlBtn.backgroundColor = .ypBlack
+            createHabitlBtn.setTitleColor(.systemBackground, for: .normal)
             createHabitlBtn.isEnabled = true
         } else {
             createHabitlBtn.backgroundColor = .gray
+            createHabitlBtn.setTitleColor(.white, for: .normal)
             createHabitlBtn.isEnabled = false
         }
+    }
+    private func clearData() {
+        schedule = []
+        trackerNameTextField.text = ""
+        selectedEmoji = ""
+        selectedCategory = nil
+        selectedColor = UIColor()
+        tableView.reloadData()
     }
     
     // MARK: - actions
     @objc func cancelBtnAction() {
+        self.clearData()
         self.dismiss(animated: true)
     }
     
@@ -379,6 +391,7 @@ extension HabitViewController: ScheduleDelegate {
 extension HabitViewController: HabitVCDelegate {
     func getSelectedCategory(category: TrackerCategory?) {
         self.selectedCategory = category
+        shouldEnableButton()
         tableView.reloadData()
     }
 }

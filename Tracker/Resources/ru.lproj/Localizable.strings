@@ -28,6 +28,7 @@
 "category_title" = "Категория";
 "new_category_button" = "Добавить категорию";
 "new_category_title" = "Новая категория";
+"edit_category_title" = "Редактирование категории";
 "category_name_textfield" = "Введите название категории";
 "add_new_category_button" = "Готово";
 "delete" = "Удалить";

@@ -124,6 +124,8 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         trackersCollectionView.delegate = self
 
         trackerStore.setDelegate(self)
+        trackerCategoryStore.setDelegate(self)
+    
         filterListViewModel.delegate = self
         alertPresenter = AlertPresenter(viewController: self)
         
@@ -512,7 +514,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         if !trackers.isEmpty {
             let tracker = trackers[indexPath.row]
             
-            collectionView.backgroundColor = .white
+            collectionView.backgroundColor = .systemBackground
             
             let isCompletedToday = isTrackerCompletedToday(id: tracker.id)
             let completedDays = completedTrackers.filter { $0.id == tracker.id }.count
@@ -591,7 +593,9 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
                     alert.addAction(UIAlertAction(title: "Удалить", style: .destructive , handler: { [weak self] _ in
                         guard let self = self else { return }
                         try? self.trackerStore.delete(tracker)
-                        try? self.trackerRecordStore.deleteRecord(completedTrackers[indexPath.row])
+                        if completedTrackers.contains(where: { $0.id == tracker.id }) {
+                            try? self.trackerRecordStore.deleteRecord(completedTrackers[indexPath.row])
+                        }
                         self.updateVisibleCategories()
                     }))
                         
@@ -624,6 +628,14 @@ extension TrackerViewController: TrackerStoreDelegate {
     func didUpdate(_ update: TrackerStoreUpdate) {
         trackersCollectionView.performBatchUpdates {
             trackersCollectionView.insertSections(update.insertedSections)
+            trackersCollectionView.insertItems(at: update.insertedIndexPaths)
+        }
+    }
+}
+
+extension TrackerViewController: TrackerCategoryStoreDelegate {
+    func didUpdate(_ update: TrackerCategoryStoreUpdate) {
+        trackersCollectionView.performBatchUpdates {
             trackersCollectionView.insertItems(at: update.insertedIndexPaths)
         }
     }

@@ -26,6 +26,7 @@ class IrregularViewController: UIViewController {
     
     private var categoriesVC: CategoriesViewController?
     private var selectedCategory: TrackerCategory? = nil
+    private var categoryUpdated: Bool = false
 
     private lazy var scrollView: UIScrollView = {
         let sv = UIScrollView()
@@ -116,7 +117,7 @@ class IrregularViewController: UIViewController {
         btn.layer.borderColor = redColor
         btn.layer.borderWidth = 1
         btn.layer.cornerRadius = 16
-        btn.backgroundColor = .white
+        btn.backgroundColor = .systemBackground
         btn.setTitle("cancel_button".localized , for: .normal)
         btn.setTitleColor(.ypRed, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -129,7 +130,7 @@ class IrregularViewController: UIViewController {
         btn.backgroundColor = .gray
         btn.layer.cornerRadius = 16
         btn.setTitle("create_tracker_button".localized, for: .normal)
-        btn.setTitleColor(.white, for: .normal)
+        btn.setTitleColor(.systemBackground, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.isEnabled = false
         btn.addTarget(self, action: #selector(createHabitBtnAction), for: .touchUpInside)
@@ -204,7 +205,7 @@ class IrregularViewController: UIViewController {
     
     // MARK: - private methods
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         scrollView.addSubview(containerView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(trackerNameTextField)
@@ -287,15 +288,27 @@ class IrregularViewController: UIViewController {
     private func shouldEnableButton() {
         if !trackerNameIsEmpty && selectedCategory != nil {
             createHabitlBtn.backgroundColor = .ypBlack
+            createHabitlBtn.setTitleColor(.systemBackground, for: .normal)
             createHabitlBtn.isEnabled = true
         } else {
             createHabitlBtn.backgroundColor = .gray
+            createHabitlBtn.setTitleColor(.white, for: .normal)
             createHabitlBtn.isEnabled = false
         }
     }
     
+    private func clearData() {
+        trackerNameTextField.text = ""
+        selectedEmoji = ""
+        selectedCategory = nil
+        selectedColor = UIColor()
+        tableView.reloadData()
+    }
+    
+    
     // MARK: - actions
     @objc func cancelBtnAction() {
+        
         self.dismiss(animated: true)
     }
     
@@ -333,6 +346,7 @@ class IrregularViewController: UIViewController {
 extension IrregularViewController: HabitVCDelegate {
     func getSelectedCategory(category: TrackerCategory?) {
         self.selectedCategory = category
+        shouldEnableButton()
         tableView.reloadData()
     }
 }

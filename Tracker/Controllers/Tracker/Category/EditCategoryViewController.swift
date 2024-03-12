@@ -1,17 +1,17 @@
 //
-//  CreateNewCategoryViewController.swift
+//  EditCategoryViewController.swift
 //  Tracker
 //
-//  Created by Bogdan Fartdinov on 22.01.2024.
+//  Created by Bogdan Fartdinov on 11.03.2024.
 //
 
 import UIKit
 
-class CreateNewCategoryViewController: UIViewController, UITextFieldDelegate {
+class EditCategoryViewController: UIViewController, UITextFieldDelegate {
 
-//    private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
-    private let trackerCategoryStore: TrackerCategoryStoreProtocol
+    let trackerCategoryStore: TrackerCategoryStoreProtocol
     
+    private var trackerCategory: TrackerCategory?
 
     // MARK: - private properties
 
@@ -19,7 +19,7 @@ class CreateNewCategoryViewController: UIViewController, UITextFieldDelegate {
     
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "new_category_title".localized
+        lbl.text = "edit_category_title".localized
         lbl.textAlignment = .center
         lbl.textColor = .ypBlack
         lbl.font = .systemFont(ofSize: 16, weight: .medium)
@@ -56,7 +56,7 @@ class CreateNewCategoryViewController: UIViewController, UITextFieldDelegate {
         self.trackerCategoryStore = trackerCategoryStore
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -64,8 +64,16 @@ class CreateNewCategoryViewController: UIViewController, UITextFieldDelegate {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
         setupView()
         view.addHideKeyboardTapGesture()
+    }
+    
+    func setupScreen(with category: TrackerCategory) {
+        trackerCategory = category
+        categoryNameTextField.text = category.category
+        isCategoryNameEmpty = false
+        setupButton(enable: !isCategoryNameEmpty)
     }
     
     // MARK: - Setup
@@ -108,12 +116,13 @@ class CreateNewCategoryViewController: UIViewController, UITextFieldDelegate {
         addCategoryBtn.isEnabled = enable
     }
     
+    
     // MARK: - actions
     @objc private func addCategoryBtnAction() {
-        guard let categoryName = categoryNameTextField.text else { return }
+        guard let categoryName = categoryNameTextField.text,
+        let trackerCategory = trackerCategory else { return }
         
-        let category = TrackerCategory(category: categoryName, trackers: [])
-        try? trackerCategoryStore.addNewCategory(category)
+        try? trackerCategoryStore.update(trackerCategory: trackerCategory, with: categoryName)
         dismiss(animated: true)
     }
     
@@ -127,3 +136,4 @@ class CreateNewCategoryViewController: UIViewController, UITextFieldDelegate {
         }
     }
 }
+
