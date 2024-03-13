@@ -333,6 +333,7 @@ class IrregularViewController: UIViewController {
 extension IrregularViewController: HabitVCDelegate {
     func getSelectedCategory(category: TrackerCategory?) {
         self.selectedCategory = category
+        shouldEnableButton()
         tableView.reloadData()
     }
 }

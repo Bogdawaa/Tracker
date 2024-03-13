@@ -132,7 +132,7 @@ class EditIrregularViewController: UIViewController {
         btn.backgroundColor = .gray
         btn.layer.cornerRadius = 16
         btn.setTitle("save_tracker_button".localized, for: .normal)
-        btn.setTitleColor(.white, for: .normal)
+        btn.setTitleColor(.systemBackground, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.isEnabled = false
         btn.addTarget(self, action: #selector(createHabitBtnAction), for: .touchUpInside)
@@ -207,7 +207,7 @@ class EditIrregularViewController: UIViewController {
     
     // MARK: - private methods
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         scrollView.addSubview(containerView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(trackerNameTextField)
@@ -299,13 +299,14 @@ class EditIrregularViewController: UIViewController {
     }
     
     private func shouldEnableButton() {
-        // TODO: -  включение выключение кнопки "создать" если название трекера изменилось (работает даже если пустое)
         if !trackerNameIsEmpty && selectedCategory != nil {
             createHabitlBtn.backgroundColor = .ypBlack
             createHabitlBtn.isEnabled = true
+            createHabitlBtn.setTitleColor(.systemBackground, for: .normal)
         } else {
             createHabitlBtn.backgroundColor = .gray
             createHabitlBtn.isEnabled = false
+            createHabitlBtn.setTitleColor(.white, for: .disabled)
         }
     }
     
@@ -320,6 +321,7 @@ class EditIrregularViewController: UIViewController {
             shouldEnableButton()
         } else {
             trackerNameIsEmpty = true
+            shouldEnableButton()
         }
     }
     

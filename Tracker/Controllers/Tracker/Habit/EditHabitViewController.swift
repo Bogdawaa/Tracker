@@ -350,9 +350,11 @@ class EditHabitViewController: UIViewController {
         if (scheduleUpdated || trackerToEdit?.schedule != "") && (!trackerNameIsEmpty /*|| trackerNameTextField.text != ""*/) && selectedCategory != nil {
             createHabitlBtn.backgroundColor = .ypBlack
             createHabitlBtn.isEnabled = true
+            createHabitlBtn.setTitleColor(.systemBackground, for: .normal)
         } else {
             createHabitlBtn.backgroundColor = .gray
             createHabitlBtn.isEnabled = false
+            createHabitlBtn.setTitleColor(.white, for: .disabled)
         }
     }
     
@@ -367,6 +369,7 @@ class EditHabitViewController: UIViewController {
             shouldEnableButton()
         } else {
             trackerNameIsEmpty = true
+            shouldEnableButton()
         }
     }
     
