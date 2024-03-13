@@ -611,7 +611,9 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
                     alert.addAction(UIAlertAction(title: "Удалить", style: .destructive , handler: { [weak self] _ in
                         guard let self = self else { return }
                         try? self.trackerStore.delete(tracker)
-                        try? self.trackerRecordStore.deleteRecord(completedTrackers[indexPath.row])
+                        if completedTrackers.contains(where: { $0.id == tracker.id }) {
+                            try? self.trackerRecordStore.deleteRecord(completedTrackers[indexPath.row])
+                        }
                         self.updateVisibleCategories()
                         analyticsService.report(event: "click", params: ["screen":"Main", "item": "delete"])
                     }))
