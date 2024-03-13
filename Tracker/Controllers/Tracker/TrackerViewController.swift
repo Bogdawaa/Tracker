@@ -166,9 +166,11 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
     }
     
     private func setupTabBar() {
-        self.tabBarController?.tabBar.layer.borderWidth = 1
-        self.tabBarController?.tabBar.layer.borderColor = UIColor.lightGray.cgColor
-        self.tabBarController?.tabBar.clipsToBounds = true
+        guard let tabBar = tabBarController?.tabBar else { return }
+        let topline = CALayer()
+        topline.frame = CGRect(x: 0, y: 0, width: tabBar.frame.width, height: 1)
+        topline.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3).cgColor
+        tabBar.layer.addSublayer(topline)
     }
     
     private func setupNavBar() {
