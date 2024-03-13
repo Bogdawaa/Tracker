@@ -152,7 +152,7 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
         // отображение велюченых свичей
         if schedule.count > 0 {
             for day in schedule {
-                day == sw.tag ? (sw.isOn = true) : (sw.isOn = false)
+                if day == sw.tag { (sw.isOn = true) }
             }
         }
         return cell
