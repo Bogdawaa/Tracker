@@ -133,8 +133,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     private func applyConstraints() {
         let containerViewConstraints = [
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             containerView.heightAnchor.constraint(equalToConstant: 90)
         ]
         let emojiContainerConstraints = [
@@ -190,5 +190,11 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         } else {
             cellDelegate?.completedTracker(id: trackerId, at: indexPath)
         }
+    }
+}
+
+extension TrackerCollectionViewCell {
+    var highlightView: UIView {
+        return containerView
     }
 }

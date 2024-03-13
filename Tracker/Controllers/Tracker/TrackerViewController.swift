@@ -206,8 +206,8 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         ]
         let trackersCollectionViewConstraints = [
             trackersCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 206),
-            trackersCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            trackersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            trackersCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            trackersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             trackersCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -84)
         ]
         let filterButtonConstraints = [
@@ -519,9 +519,9 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: TrackerCollectionViewCell.identifier,
             for: indexPath) as? TrackerCollectionViewCell else {
-                return UICollectionViewCell()
+            return UICollectionViewCell()
         }
-
+        
         cell.cellDelegate = self
         
         let trackers = visibleCategories[indexPath.section].trackers
@@ -577,14 +577,14 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
                                                          height: UIView.layoutFittingExpandedSize.height),
-                                                            withHorizontalFittingPriority: .required,
-                                                            verticalFittingPriority: .fittingSizeLevel)
+                                                  withHorizontalFittingPriority: .required,
+                                                  verticalFittingPriority: .fittingSizeLevel)
     }
     
     // MARK: - контекстное меню
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
         guard indexPaths.count > 0 else { return nil }
-
+        
         let indexPath = indexPaths[0]
         let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
         var pinTitle: String
@@ -605,7 +605,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
                     guard let self = self else { return }
                     
                     let alert = UIAlertController(title: "", message: "Уверены что хотите удалить трекер?", preferredStyle: .actionSheet)
-
+                    
                     alert.addAction(UIAlertAction(title: "Удалить", style: .destructive , handler: { [weak self] _ in
                         guard let self = self else { return }
                         try? self.trackerStore.delete(tracker)
@@ -613,7 +613,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
                         self.updateVisibleCategories()
                         analyticsService.report(event: "click", params: ["screen":"Main", "item": "delete"])
                     }))
-                        
+                    
                     alert.addAction(UIAlertAction(title: "Отменить", style: .cancel , handler: nil ))
                     self.present(alert, animated: true, completion: nil)
                 }),
@@ -621,18 +621,11 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         })
     }
     
-    func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfiguration configuration: UIContextMenuConfiguration, highlightPreviewForItemAt indexPath: IndexPath) -> UITargetedPreview? {
         let params = UIPreviewParameters()
         params.backgroundColor = .clear
-        
-        guard let indexPath = configuration.identifier as? IndexPath else { return nil }
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: TrackerCollectionViewCell.identifier,
-            for: indexPath) as? TrackerCollectionViewCell else {
-                return nil
-        }
-        
-        let preview = UITargetedPreview(view: cell.contentView, parameters: params)
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TrackerCollectionViewCell else { return nil }
+        let preview = UITargetedPreview(view: cell.highlightView, parameters: params)
         return preview
     }
 }
