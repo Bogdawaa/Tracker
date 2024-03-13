@@ -140,9 +140,17 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         
         view.addHideKeyboardTapGesture()
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         analyticsService.report(event: "open", params: ["screen": "Main"])
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        analyticsService.report(event: "close", params: ["screen": "Main"])
+    }
     
     // MARK: - Setup
     private func setupView() {
@@ -606,12 +614,11 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
                         analyticsService.report(event: "click", params: ["screen":"Main", "item": "delete"])
                     }))
                         
-                        alert.addAction(UIAlertAction(title: "Отменить", style: .cancel , handler: nil ))
+                    alert.addAction(UIAlertAction(title: "Отменить", style: .cancel , handler: nil ))
                     self.present(alert, animated: true, completion: nil)
                 }),
             ])
         })
-        // TODO: доделать выделение только верхней части трекера
     }
     
     func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
