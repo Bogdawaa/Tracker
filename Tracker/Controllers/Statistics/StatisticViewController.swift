@@ -49,17 +49,28 @@ class StatisticViewController: UIViewController, StatisticsVCDelegate {
         return view
     }()
     
+    private let gradientColors = [
+        UIColor(red: 0/255, green: 123/255, blue: 250/255, alpha: 1),
+        UIColor(red: 70/255, green: 230/255, blue: 157/255, alpha: 1),
+        UIColor(red: 253/255, green: 76/255, blue: 73/255, alpha: 1)
+    ]
+    
+    // MARK: - Lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateStatisticsView()
     }
     
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupStatisticView()
         applyConstraints()
         updateStatisticsView()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        statisticsCardView.setGradientBorder(width: 1.0, colors: gradientColors)
     }
     
     func updateStatisticsView() {
@@ -87,18 +98,6 @@ class StatisticViewController: UIViewController, StatisticsVCDelegate {
         view.addSubview(statisticsNotFoundView)
         statisticsCardView.addSubview(completedTrackersTotal)
         view.addSubview(statisticsCardView)
-        
-        statisticsCardView.layer.cornerRadius = 16
-        
-//        let gradientColors = [
-//            UIColor(red: 0/255, green: 123/255, blue: 250/255, alpha: 1),
-//            UIColor(red: 70/255, green: 230/255, blue: 157/255, alpha: 1),
-//            UIColor(red: 253/255, green: 76/255, blue: 73/255, alpha: 1)
-//        ]
-        statisticsCardView.layer.borderWidth = 1
-        
-        // градиент не работает
-        statisticsCardView.setGradientBorder(width: 5.0, colors: [UIColor.red , UIColor.blue]) // dosnt work
     }
     
     private func applyConstraints() {
