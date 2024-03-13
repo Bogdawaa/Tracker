@@ -111,7 +111,7 @@ final class TrackerCategoryStore: NSObject {
         try context.save()
     }
     
-    private func removeTrackerFromCategory(tracker: Tracker, category: TrackerCategory) {
+    private func removeTrackerFromCategory(tracker: Tracker, category: TrackerCategory) throws {
         let trackerCategoryCoreData = try? fetchSingleCategoryCoreData(for: category)
         
         let trackerCoreData = TrackerCoreData(context: context)

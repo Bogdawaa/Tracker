@@ -32,6 +32,7 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
     private let trackerRecordStore: TrackerRecordStoreProtocol = TrackerRecordStore()
     private let uicolormarshaling = UIColorMarshalling()
     private let filterListViewModel = FilterListViewModel()
+    private let analyticsService = AnalyticService()
     
     private lazy var searchController: UISearchController = {
         let sc = UISearchController(searchResultsController: nil)
@@ -135,10 +136,11 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
         setupCollectionView()
         setupSearchController()
         showPlaceholderImage()
-        
         bind()
         
         view.addHideKeyboardTapGesture()
+        
+        analyticsService.report(event: "open", params: ["screen": "Main"])
     }
     
     
@@ -394,6 +396,8 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
 
     // MARK: - actions
     @objc func addButtonAction(sender: UIBarButtonItem) {
+        analyticsService.report(event: "click", params: ["screen":"Main", "item": "add_track"])
+        
         let habitVC = HabitViewController()
         habitVC.trackerVCDelegate = self
         
@@ -422,6 +426,8 @@ final class TrackerViewController: UIViewController, TrackerVCDelegate {
     }
     
     @objc func filterBtnAction() {
+        analyticsService.report(event: "click", params: ["screen":"Main", "item": "filter"])
+
         let filterListVC = FilterListViewController(viewModel: filterListViewModel)
         filterListViewModel.delegate = self
         present(filterListVC.self, animated: true)
@@ -461,7 +467,9 @@ extension TrackerViewController: TrackerCellDelegate {
             alertPresenter?.showAlert(in: self, error: error)
         }
         fetchData()
-        trackersCollectionView.reloadItems(at: [indexPath])        
+        trackersCollectionView.reloadItems(at: [indexPath])
+        
+        analyticsService.report(event: "click", params: ["screen":"Main", "item": "track"])
     }
     
     func uncompletedTracker(id: UUID, at indexPath: IndexPath) {
@@ -583,6 +591,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
                 UIAction(title: "Редактировать", handler: { [weak self] _ in
                     guard let self = self else { return }
                     self.editTracker(indexPath: indexPath)
+                    analyticsService.report(event: "click", params: ["screen":"Main", "item": "edit"])
                 }),
                 UIAction(title: "Удалить", attributes: .destructive, handler: { [weak self] _ in
                     guard let self = self else { return }
@@ -594,6 +603,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
                         try? self.trackerStore.delete(tracker)
                         try? self.trackerRecordStore.deleteRecord(completedTrackers[indexPath.row])
                         self.updateVisibleCategories()
+                        analyticsService.report(event: "click", params: ["screen":"Main", "item": "delete"])
                     }))
                         
                         alert.addAction(UIAlertAction(title: "Отменить", style: .cancel , handler: nil ))
