@@ -9,7 +9,7 @@ import UIKit
 
 class TemplateViewController: UIViewController {
     
-    var onboardingWasShown = false
+    private var onboardingWasShown = false
     
     private var backgroundImageView: UIImageView = {
         var img = UIImage(named: "onboardingBlue")
@@ -106,7 +106,7 @@ class TemplateViewController: UIViewController {
         let tabBar = TabBarController()
         tabBar.modalPresentationStyle = .fullScreen
         onboardingWasShown = true
-        UserDefaults.standard.set(onboardingWasShown, forKey: "onboardingWasShown")
+        UserDefaults.standard.setOnboardingWasShown(value: onboardingWasShown)
         self.present(tabBar, animated: true)
     }
 }

@@ -18,6 +18,7 @@
 		F00DF49E2B9E22A400825462 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = F00DF49D2B9E22A400825462 /* SnapshotTesting */; };
 		F00DF4A42BA0FC8200825462 /* EditCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00DF4A32BA0FC8200825462 /* EditCategoryViewController.swift */; };
 		F00DF4A62BA2221200825462 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00DF4A52BA2221200825462 /* AnalyticsService.swift */; };
+		F00DF4A82BA4C86D00825462 /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00DF4A72BA4C86D00825462 /* UserDefaults+Extensions.swift */; };
 		F05FB9BC2B1145CD00B524ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05FB9BB2B1145CD00B524ED /* AppDelegate.swift */; };
 		F05FB9BE2B1145CD00B524ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05FB9BD2B1145CD00B524ED /* SceneDelegate.swift */; };
 		F05FB9C02B1145CD00B524ED /* TrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05FB9BF2B1145CD00B524ED /* TrackerViewController.swift */; };
@@ -84,6 +85,7 @@
 		F00DF4952B9E1DB500825462 /* TrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
 		F00DF4A32BA0FC8200825462 /* EditCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCategoryViewController.swift; sourceTree = "<group>"; };
 		F00DF4A52BA2221200825462 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
+		F00DF4A72BA4C86D00825462 /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
 		F05FB9B82B1145CD00B524ED /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F05FB9BB2B1145CD00B524ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F05FB9BD2B1145CD00B524ED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				F05FBA2A2B349B9100B524ED /* UIColorMarshalling.swift */,
 				F09AA7A42B56F74800C15DAB /* UIView+Extensions.swift */,
 				F0F85AC52B69672F00B20288 /* String + Extensions.swift */,
+				F00DF4A72BA4C86D00825462 /* UserDefaults+Extensions.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -539,6 +542,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F00DF4A82BA4C86D00825462 /* UserDefaults+Extensions.swift in Sources */,
 				F05FB9FF2B1CC6FC00B524ED /* CreateNewTrackerViewController.swift in Sources */,
 				F05FBA112B1F977E00B524ED /* CategoriesViewController.swift in Sources */,
 				F05FBA2F2B34C4C500B524ED /* TrackerRecordStore.swift in Sources */,
