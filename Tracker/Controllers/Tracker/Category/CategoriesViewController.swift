@@ -18,7 +18,7 @@ final class CategoriesViewController: UIViewController, CategoriesViewModelProto
     
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Категория"
+        lbl.text = "category_title".localized
         lbl.textAlignment = .center
         lbl.textColor = .ypBlack
         lbl.font = .systemFont(ofSize: 16, weight: .medium)
@@ -42,7 +42,7 @@ final class CategoriesViewController: UIViewController, CategoriesViewModelProto
     
     private lazy var emptyTrackersLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Привычки и события можно объединить по смыслу"
+        lbl.text = "emptyTrackersLabel".localized
         lbl.textAlignment = .center
         lbl.font = .systemFont(ofSize: 12, weight: .medium)
         lbl.textColor = .ypBlack
@@ -55,7 +55,8 @@ final class CategoriesViewController: UIViewController, CategoriesViewModelProto
         btn.backgroundColor = .ypBlack
         btn.layer.cornerRadius = 16
         btn.addTarget(self, action: #selector(addNewCategoryBtnAction), for: .touchUpInside)
-        btn.setTitle("Добавить категорию", for: .normal)
+        btn.setTitle("new_category_button".localized, for: .normal)
+        btn.setTitleColor(.systemBackground, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
@@ -91,12 +92,14 @@ final class CategoriesViewController: UIViewController, CategoriesViewModelProto
         setupView()
         applyConstraints()
         bind()
+        
+        viewModel.delegate = self
         viewModel.getCategories()
     }
     
     // MARK: - Setup
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         view.addSubview(titleLabel)
         emptyTrackresView.addSubview(emptyTrackersLogo)
         emptyTrackresView.addSubview(emptyTrackersLabel)
@@ -209,5 +212,34 @@ extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.reloadData()
         viewModel.setSelectedCategory(categoryIndex: indexPath)
         dismiss(animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(actionProvider:  { actionProvider in
+            return UIMenu(children: [
+                UIAction(title: "Редактировать", handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    viewModel.editCategory(indexPath)
+                }),
+                UIAction(title: "Удалить", attributes: .destructive, handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    
+                    let alert = UIAlertController(title: "", message: "Эта категория точно не нужна?", preferredStyle: .actionSheet)
+
+                    alert.addAction(UIAlertAction(title: "Удалить", style: .destructive , handler: { [weak self] _ in
+                        guard let self = self else { return }
+                        viewModel.deleteCategory(indexPath)
+                    }))
+                    alert.addAction(UIAlertAction(title: "Отменить", style: .cancel , handler: nil ))
+                    self.present(alert, animated: true, completion: nil)
+                }),
+            ])
+        })
+    }
+}
+
+extension CategoriesViewController: CategoriesViewModeDelegate {
+    func showVC(vc: UIViewController) {
+        present(vc.self, animated: true)
     }
 }

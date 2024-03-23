@@ -17,7 +17,7 @@ class CreateNewCategoryViewController: UIViewController, UITextFieldDelegate {
     
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Новая категория"
+        lbl.text = "new_category_title".localized
         lbl.textAlignment = .center
         lbl.textColor = .ypBlack
         lbl.font = .systemFont(ofSize: 16, weight: .medium)
@@ -27,7 +27,7 @@ class CreateNewCategoryViewController: UIViewController, UITextFieldDelegate {
     
     private lazy var categoryNameTextField: CustomTextField = {
         let tf = CustomTextField()
-        tf.placeholder = "Введите название категории"
+        tf.placeholder = "category_name_textfield".localized
         tf.layer.cornerRadius = 16
         tf.backgroundColor = .ypGray
         tf.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +41,8 @@ class CreateNewCategoryViewController: UIViewController, UITextFieldDelegate {
         btn.backgroundColor = .gray
         btn.layer.cornerRadius = 16
         btn.addTarget(self, action: #selector(addCategoryBtnAction), for: .touchUpInside)
-        btn.setTitle("Готово", for: .normal)
+        btn.setTitle("add_new_category_button".localized, for: .normal)
+        btn.setTitleColor(.systemBackground, for: .normal)
         btn.isEnabled = false
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
@@ -68,7 +69,7 @@ class CreateNewCategoryViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - Setup
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         view.addSubview(titleLabel)
         view.addSubview(categoryNameTextField)
         view.addSubview(addCategoryBtn)

@@ -15,8 +15,7 @@ protocol TrackerRecordStoreDelegate: AnyObject {
 protocol TrackerRecordStoreProtocol {
     func fetchRecords() throws -> [TrackerRecord]
     func addNewRecord(with id: UUID, by date: Date) throws
-    func deleteRecord(_ trackerRecordCoreData: TrackerRecordCoreData) throws
-    
+    func deleteRecord(_ trackerRecord: TrackerRecord) throws
     func fetchTrackerRecordCoreData(for trackerID: UUID, by date: Date) throws -> TrackerRecordCoreData?
 }
 
@@ -81,7 +80,10 @@ extension TrackerRecordStore: TrackerRecordStoreProtocol {
         try context.save()
     }
     
-    func deleteRecord(_ trackerRecordCoreData: TrackerRecordCoreData) throws {
+    func deleteRecord(_ trackerRecord: TrackerRecord) throws {
+        let trackerRecordCoreData = try? fetchTrackerRecordCoreData(for: trackerRecord.id, by: trackerRecord.date)
+        guard let trackerRecordCoreData = trackerRecordCoreData else { return }
         try delete(trackerRecordCoreData: trackerRecordCoreData)
+        try context.save()
     }
 }

@@ -19,6 +19,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "TrackerCell"
     
+    private var completedDaysLocalized: String = ""
+    
     let emojiContainerView: UIView = {
         let view = UIView()
         view.isHidden = true
@@ -131,8 +133,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     private func applyConstraints() {
         let containerViewConstraints = [
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             containerView.heightAnchor.constraint(equalToConstant: 90)
         ]
         let emojiContainerConstraints = [
@@ -170,16 +172,11 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }
     
     private func pluralizeDays(_ count: Int) -> String {
-        let remain10 = count % 10
-        let remain100 = count % 100
-        
-        if remain10 == 1 && remain100 != 11 {
-            return "\(count) день"
-        } else if remain10 >= 2 && remain10 <= 4 && (remain100 < 10 || remain100 >= 20) {
-            return "\(count) дня"
-        } else {
-            return "\(count) дней"
-        }
+        completedDaysLocalized = String.localizedStringWithFormat(
+            NSLocalizedString("number_of_days", comment: "Number of days with completed Tracker"),
+            count
+        )
+        return completedDaysLocalized
     }
     
     // MARK: - actions
@@ -193,5 +190,11 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         } else {
             cellDelegate?.completedTracker(id: trackerId, at: indexPath)
         }
+    }
+}
+
+extension TrackerCollectionViewCell {
+    var highlightView: UIView {
+        return containerView
     }
 }

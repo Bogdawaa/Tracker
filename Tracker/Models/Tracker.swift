@@ -13,6 +13,8 @@ struct Tracker {
     let color: UIColor
     let emoji: String
     let schedule: String
+    let isPinned: Bool
+    let isRegular: Bool
 }
 
 struct TrackerCategory {
@@ -46,4 +48,31 @@ enum WeekDay: String, CaseIterable, Codable {
         default: return nil
         }
     }
+}
+
+func convertScheduleStringToInt(scheduleStr: String) -> [Int] {
+    var arrInt: [Int] = []
+    let daysStringArr = scheduleStr.components(separatedBy: ",")
+    for day in daysStringArr {
+        let trimmedDay = day.trimmingCharacters(in: .whitespaces)
+        switch trimmedDay {
+        case "Пн":
+            arrInt.append(0)
+        case "Вт":
+            arrInt.append(1)
+        case "Ср":
+            arrInt.append(2)
+        case "Чт":
+            arrInt.append(3)
+        case "Пт":
+            arrInt.append(4)
+        case "Сб":
+            arrInt.append(5)
+        case "Вс":
+            arrInt.append(6)
+        default:
+            continue
+        }
+    }
+    return arrInt
 }

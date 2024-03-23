@@ -49,7 +49,7 @@ class HabitViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Новая привычка"
+        lbl.text = "new_habit_title".localized
         lbl.textAlignment = .center
         lbl.textColor = .ypBlack
         lbl.font = .systemFont(ofSize: 16, weight: .medium)
@@ -59,7 +59,7 @@ class HabitViewController: UIViewController {
     
     private lazy var trackerNameTextField: CustomTextField = {
         let tf = CustomTextField()
-        tf.placeholder = "Введите название трекера"
+        tf.placeholder = "tracker_name_textfield".localized
         tf.layer.cornerRadius = 16
         tf.backgroundColor = .ypGray
         tf.translatesAutoresizingMaskIntoConstraints = false
@@ -125,7 +125,7 @@ class HabitViewController: UIViewController {
         btn.layer.borderWidth = 1
         btn.layer.cornerRadius = 16
         btn.backgroundColor = .white
-        btn.setTitle("Отменить", for: .normal)
+        btn.setTitle("cancel_button".localized , for: .normal)
         btn.setTitleColor(.ypRed, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.addTarget(self, action: #selector(cancelBtnAction), for: .touchUpInside)
@@ -136,7 +136,7 @@ class HabitViewController: UIViewController {
         let btn = UIButton()
         btn.backgroundColor = .gray
         btn.layer.cornerRadius = 16
-        btn.setTitle("Создать", for: .normal)
+        btn.setTitle("create_tracker_button".localized, for: .normal)
         btn.setTitleColor(.white, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.isEnabled = false
@@ -147,7 +147,10 @@ class HabitViewController: UIViewController {
     var cellSubtitle = ""
     private var scheduleVC: ScheduleViewController?
     
-    private var habitButtons = ["Категория", "Расписание"]
+    private var habitButtons = [
+        "category_tableview_cell".localized,
+        "schedule_tableview_cell".localized
+    ]
     private var schedule: [Int] = []
     private var emojiArr = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
@@ -216,7 +219,6 @@ class HabitViewController: UIViewController {
     
     // MARK: - private methods
     private func setupView() {
-        view.backgroundColor = .white
         scrollView.addSubview(containerView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(trackerNameTextField)
@@ -226,6 +228,7 @@ class HabitViewController: UIViewController {
         containerView.addSubview(cancelBtn)
         containerView.addSubview(createHabitlBtn)
         view.addSubview(scrollView)
+        view.backgroundColor = .systemBackground
     }
     
     private func applyConstraints() {
@@ -307,7 +310,7 @@ class HabitViewController: UIViewController {
             }
         }
         if schedule.count == 7 {
-            cellSubtitle = "Каждый день"
+            cellSubtitle = "everyday_switch".localized
             return cellSubtitle
         }
         cellSubtitle = String(cellSubtitle.dropLast(2))
@@ -317,15 +320,28 @@ class HabitViewController: UIViewController {
     private func shouldEnableButton() {
         if scheduleUpdated && !trackerNameIsEmpty && selectedCategory != nil {
             createHabitlBtn.backgroundColor = .ypBlack
+            createHabitlBtn.setTitleColor(.systemBackground, for: .normal)
             createHabitlBtn.isEnabled = true
         } else {
             createHabitlBtn.backgroundColor = .gray
+            createHabitlBtn.setTitleColor(.white, for: .normal)
             createHabitlBtn.isEnabled = false
         }
     }
     
+    private func clearData() {
+        schedule = []
+        trackerNameTextField.text = ""
+        selectedColor = UIColor()
+        selectedEmoji = ""
+        selectedCategory = nil
+        shouldEnableButton()
+        tableView.reloadData()
+    }
+    
     // MARK: - actions
     @objc func cancelBtnAction() {
+        clearData()
         self.dismiss(animated: true)
     }
     
@@ -347,7 +363,9 @@ class HabitViewController: UIViewController {
             name: trackerName,
             color: selectedColor,
             emoji: selectedEmoji,
-            schedule: schedule.map { WeekDay(id: $0)?.rawValue ?? "" }.joined(separator: ", ")
+            schedule: schedule.map { WeekDay(id: $0)?.rawValue ?? "" }.joined(separator: ", "),
+            isPinned: false,
+            isRegular: true
         )
         trackerVCDelegate?.add(tracker, category: selectedCategory)
         trackerVCDelegate?.updateVisibleCategories()
@@ -374,6 +392,7 @@ extension HabitViewController: ScheduleDelegate {
 extension HabitViewController: HabitVCDelegate {
     func getSelectedCategory(category: TrackerCategory?) {
         self.selectedCategory = category
+        shouldEnableButton()
         tableView.reloadData()
     }
 }
@@ -487,7 +506,7 @@ extension HabitViewController: UICollectionViewDelegate, UICollectionViewDataSou
         if collectionView == emojiCollectionView {
             titleCategory = "Emoji"
         } else if collectionView == colorsCollectionView {
-            titleCategory = "Цвет"
+            titleCategory = "color_collectionview_title".localized
         }
         let view = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,

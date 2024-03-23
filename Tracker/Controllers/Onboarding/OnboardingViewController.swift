@@ -21,13 +21,13 @@ final class OnboardingViewController: UIPageViewController {
     
     private let blueVC = TemplateViewController(
         backgroundImage: UIImage(named: "onboardingBlue") ?? UIImage(),
-        titleLabelText: "Отслеживайте только то, что хотите",
+        titleLabelText: "onboarding_blue_titleLabelText".localized,
         buttonText: nil
     )
     
     private let redVC = TemplateViewController(
         backgroundImage: UIImage(named: "onboardingRed") ?? UIImage(),
-        titleLabelText: "Даже если это не литры воды и йога",
+        titleLabelText: "onboarding_red_titleLabelText".localized,
         buttonText: nil
     )
     
